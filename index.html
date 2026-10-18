@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>Cricket Auction Battle</title>
+<style>
+*{box-sizing:border-box} body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#07152b,#102b52);color:#fff;min-height:100vh}
+.container{max-width:1100px;margin:auto;padding:18px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+h1{margin:0;font-size:30px}.sub{color:#b9c9df;margin-top:5px}
+.cards{display:grid;grid-template-columns:1fr 1.3fr 1fr;gap:14px;margin-top:18px}
+.card{background:#ffffff12;border:1px solid #ffffff20;border-radius:18px;padding:16px;backdrop-filter:blur(8px)}
+.player{text-align:center}.player h2{margin:5px 0 4px;font-size:28px}.role{display:inline-block;padding:5px 10px;border-radius:999px;background:#ffd166;color:#111;font-weight:bold}
+.price{font-size:42px;font-weight:800;margin:10px}.turn{font-size:18px;font-weight:bold}
+.controls{margin-top:15px}.bidrow{display:flex;gap:8px;align-items:center}.bidrow input{flex:1}
+input[type=range]{width:100%;accent-color:#00d4ff}.bidvalue{font-size:22px;font-weight:bold;text-align:center}
+button{border:0;border-radius:12px;padding:11px 15px;font-weight:700;cursor:pointer;background:#00d4ff;color:#00101c}
+button.secondary{background:#ffffff18;color:#fff;border:1px solid #ffffff25}button.danger{background:#ff5d73;color:#fff}
+button:disabled{opacity:.4;cursor:not-allowed}
+.teamlist{min-height:170px}.teamlist div{padding:8px 0;border-bottom:1px solid #ffffff18;display:flex;justify-content:space-between}
+.money{font-size:23px;font-weight:800}.small{font-size:13px;color:#b9c9df}
+.center-actions{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:14px}
+.notice{text-align:center;margin-top:10px;min-height:24px;color:#ffe08a;font-weight:bold}
+.progress{margin-top:14px;height:9px;background:#ffffff18;border-radius:99px;overflow:hidden}.bar{height:100%;background:#00d4ff;width:0}
+.filters{display:flex;gap:7px;flex-wrap:wrap;margin:15px 0}.filters button{padding:8px 11px}
+.stats{display:flex;justify-content:space-between;gap:10px;margin-top:10px}.stat{text-align:center;flex:1;background:#ffffff0d;padding:9px;border-radius:10px}
+.winner{font-size:25px;text-align:center;margin-top:12px}
+@media(max-width:800px){.cards{grid-template-columns:1fr}.player{order:-1}h1{font-size:25px}}
+
+body{padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-bottom,0)}
+#setup{position:fixed;inset:0;background:#07152bf2;z-index:9;overflow:auto;padding:14px}
+#setup .card{max-width:640px;margin:auto;background:#10264a}
+.chips{display:flex;gap:7px;flex-wrap:wrap;margin:8px 0 14px}
+.chip{padding:8px 12px;background:#ffffff18;color:#fff;border:1px solid #ffffff25}.chip.on{background:#00d4ff;color:#00101c}
+.sec{font-weight:bold;margin-top:6px}.tag{display:inline-block;padding:3px 8px;border-radius:99px;font-size:12px;font-weight:bold;margin:3px 2px 0;color:#fff}
+.tM{background:#005da0}.tR{background:#d1122b}.tC{background:#e8b800;color:#111}.tS{background:#f26522}.tF{background:#ffffff22}
+#setup input[type=number]{padding:9px;border-radius:10px;border:0;width:90px}
+#avatar{text-align:center;margin:6px 0}#avatar svg,#avatar img{width:120px;height:120px;border-radius:50%;box-shadow:0 4px 14px #0008;object-fit:cover}
+#bbBox{margin-top:12px;text-align:left}.bb{background:#ffffff14;border-radius:12px;padding:10px;margin-top:8px}.bbbar{height:10px;border-radius:99px;background:#ffffff22;margin:4px 0 8px;overflow:hidden}.bbbar i{display:block;height:100%;background:#00d4ff}
+</style>
+</head>
+<body>
+<div id="setup"><div class="card">
+<h2 style="margin:4px 0;text-align:center">🏏 Auction Setup</h2>
+<div class="sec">💰 Select Budget (each player)</div>
+<div class="chips" id="budgetChips"></div>
+<div class="small" style="margin:-8px 0 12px">Custom: ₹ <input type="number" id="customBudget" min="11" max="1000" placeholder="e.g. 80"></div>
+<div class="sec">👥 How many players each? (min 4 – max 11)</div>
+<div class="chips" id="nChips"></div>
+<div class="sec">🏆 Format</div>
+<div class="chips" id="fmtChips"></div>
+<div class="sec">🏆 Player Pool</div>
+<div class="chips" id="modeChips"></div>
+
+<div class="small" id="poolInfo" style="text-align:center;margin-bottom:10px"></div>
+<div class="center-actions"><button id="startBtn" onclick="startGame()">🚀 Start Auction</button></div>
+</div></div>
+
+<div class="container">
+  <div class="top">
+    <div><h1>🏏 Cricket Auction Battle</h1><div class="sub" id="subline"></div></div>
+    <button class="danger" onclick="openSetup()">⚙️ Restart / Setup</button>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <b>✏️ Player Names</b>
+    <div class="center-actions">
+      <input id="name1" type="text" value="Player 1" maxlength="18" placeholder="Player 1 name" style="padding:11px;border-radius:10px;border:0;width:180px">
+      <input id="name2" type="text" value="Player 2" maxlength="18" placeholder="Player 2 name" style="padding:11px;border-radius:10px;border:0;width:180px">
+      <button onclick="saveNames()">Save Names</button>
+    </div>
+  </div>
+
+  <div class="cards">
+    <div class="card">
+      <h3 id="label1">👦 Brother 1</h3><div class="money" id="money1">₹50</div>
+      <div class="small">Players: <span id="count1">0</span>/<span class="N">8</span></div>
+      <div class="teamlist" id="team1"></div>
+    </div>
+
+    <div class="card player">
+      <div class="small" id="round">Player 1</div>
+      <h2 id="playerName">Virat Kohli</h2>
+      <span class="role" id="playerRole">Batsman</span><div id="playerTags"></div>
+      <div class="price" id="currentBid">₹1</div>
+      <div class="turn" id="turn">Brother 1's turn</div>
+      <div class="controls">
+        <div class="bidvalue">Bid: ₹<span id="bidText">1</span></div>
+        <input id="bidSlider" type="range" min="1" max="50" value="1" step="1">
+        <div class="center-actions">
+          <button onclick="raiseBid(1)">+ ₹1</button>
+          <button onclick="raiseBid(2)">+ ₹2</button>
+          <button onclick="raiseBid(5)">+ ₹5</button>
+          <button class="secondary" onclick="passBid()">PASS</button>
+          <button class="secondary" onclick="skipPlayer()">SKIP ⏭️</button>
+          <button onclick="sold()">SOLD 🏷️</button>
+        </div>
+      </div>
+      <div class="notice" id="notice">Set your bid and press SOLD when the other brother passes.</div>
+      <div class="progress"><div class="bar" id="bar"></div></div>
+      <div class="stats">
+        <div class="stat"><b id="soldCount">0</b><br><span class="small">Sold</span></div>
+        <div class="stat"><b id="remaining">16</b><br><span class="small">Slots left</span></div>
+        <div class="stat"><b id="pool">₹100</b><br><span class="small">Money left</span></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 id="label2">👦 Brother 2</h3><div class="money" id="money2">₹50</div>
+      <div class="small">Players: <span id="count2">0</span>/<span class="N">8</span></div>
+      <div class="teamlist" id="team2"></div>
+    </div>
+  </div>
+
+  <div class="card" id="comparison" style="margin-top:14px;display:none"><h2 style="text-align:center;margin:5px 0">🏆 Final Team Comparison</h2><div class="stats"><div class="stat"><b id="score1">0</b><br><span id="scoreName1">Player 1</span></div><div class="stat"><b>VS</b><br><span id="formatName">ALL</span></div><div class="stat"><b id="score2">0</b><br><span id="scoreName2">Player 2</span></div></div><div class="winner" id="winnerText"></div></div>
+
+<div class="card" style="margin-top:14px">
+    <b>🏆 Match Format</b><div class="center-actions"><button class="formatBtn" data-format="IPL">IPL</button><button class="formatBtn secondary" data-format="ODI">ODI</button><button class="formatBtn secondary" data-format="T20">T20</button><button class="formatBtn secondary" data-format="ALL">ALL</button></div><div class="small" style="text-align:center;margin-top:8px">Choose the format for the final team comparison.</div>
+    <b>Player Pool</b>
+    <div class="filters" id="filters"></div>
+    <div class="small">Categories: Batsman • Bowler • All-rounder • Wicketkeeper. The auction picks from the selected pool.</div>
+  </div>
+</div>
+
+<script>
+const RAW=`Virat Kohli|Bt|IOT|R
+Rohit Sharma|Bt|IOT|M
+Babar Azam|Bt|OT|
+Joe Root|Bt|OT|
+Kane Williamson|Bt|IOT|S
+Steve Smith|Bt|OT|
+Travis Head|Bt|IOT|S
+Shubman Gill|Bt|IOT|
+Suryakumar Yadav|Bt|IOT|M
+David Warner|Bt|IOT|S
+AB de Villiers|Bt|IOT|R
+Chris Gayle|Bt|IOT|R
+Sachin Tendulkar|Bt|IO|M
+Brian Lara|Bt|O|
+Kumar Sangakkara|Wk|IOT|S
+Jos Buttler|Wk|IOT|
+Rishabh Pant|Wk|IOT|
+MS Dhoni|Wk|IOT|C
+Quinton de Kock|Wk|IOT|M
+Mohammad Rizwan|Wk|OT|
+Heinrich Klaasen|Wk|IOT|S
+Adam Gilchrist|Wk|IO|
+Jasprit Bumrah|Bw|IOT|M
+Shaheen Afridi|Bw|OT|
+Pat Cummins|Bw|IOT|S
+Mitchell Starc|Bw|IOT|
+Kagiso Rabada|Bw|IOT|
+Trent Boult|Bw|IOT|M
+Rashid Khan|Bw|IOT|S
+Ravichandran Ashwin|Bw|IOT|C
+Ravindra Jadeja|Ar|IOT|C
+Hardik Pandya|Ar|IOT|M
+Ben Stokes|Ar|IOT|C
+Shakib Al Hasan|Ar|IOT|
+Glenn Maxwell|Ar|IOT|R
+Andre Russell|Ar|IT|
+Liam Livingstone|Ar|IOT|
+Marcus Stoinis|Ar|IOT|
+Cameron Green|Ar|IOT|R
+Mohammad Nabi|Ar|IOT|M
+Kapil Dev|Ar|O|
+Jacques Kallis|Ar|IO|R
+Shane Watson|Ar|IOT|C,R
+Yuvraj Singh|Ar|IOT|S,M
+Sunil Narine|Ar|IT|
+Lasith Malinga|Bw|IOT|M
+Muttiah Muralitharan|Bw|IO|C
+Shane Warne|Bw|IO|
+Dale Steyn|Bw|IOT|S,R
+Wasim Akram|Bw|O|
+Waqar Younis|Bw|O|
+Glenn McGrath|Bw|O|
+Brett Lee|Bw|IOT|
+Anil Kumble|Bw|IO|R
+Tilak Varma|Bt|IT|M
+Ishan Kishan|Wk|IT|M,S
+Kieron Pollard|Ar|IT|M
+Deepak Chahar|Bw|IT|C,M
+Dwayne Bravo|Ar|IT|C,M
+Harbhajan Singh|Bw|IO|M,C
+Krunal Pandya|Ar|IT|M,R
+Tim David|Bt|IT|R,M
+Rajat Patidar|Bt|IT|R
+Phil Salt|Wk|IT|R
+Josh Hazlewood|Bw|IOT|R,C
+Bhuvneshwar Kumar|Bw|IOT|S,R
+Mohammed Siraj|Bw|IOT|R
+Yuzvendra Chahal|Bw|IOT|R
+Faf du Plessis|Bt|IOT|C,R
+Dinesh Karthik|Wk|IT|R
+Jitesh Sharma|Wk|IT|R
+Ruturaj Gaikwad|Bt|IT|C
+Shivam Dube|Ar|IT|C
+Suresh Raina|Bt|IOT|C
+Matheesha Pathirana|Bw|IT|C
+Devon Conway|Bt|IT|C
+Moeen Ali|Ar|IOT|C,R
+Ambati Rayudu|Bt|IT|C,M
+Abhishek Sharma|Ar|IT|S
+Nitish Kumar Reddy|Ar|IT|S
+Mohammed Shami|Bw|IOT|S
+Aiden Markram|Bt|IT|S
+Washington Sundar|Ar|IT|S
+T Natarajan|Bw|IT|S
+Shikhar Dhawan|Bt|IOT|S
+KL Rahul|Wk|IOT|
+Imran Tahir|Bw|IOT|C
+Shreyas Iyer|Bt|IOT|
+Sanju Samson|Wk|IT|`;
+const OG=["Virat Kohli","MS Dhoni","Rohit Sharma","AB de Villiers","Chris Gayle","David Warner","Suresh Raina","Shikhar Dhawan","KL Rahul","Jos Buttler","Andre Russell","Kieron Pollard","Ravindra Jadeja","Hardik Pandya","Shane Watson","Sunil Narine","Dwayne Bravo","Rashid Khan","Jasprit Bumrah","Lasith Malinga","Bhuvneshwar Kumar","Yuzvendra Chahal","Ravichandran Ashwin","Trent Boult","Kagiso Rabada","Mitchell Starc","Dale Steyn","Imran Tahir","Faf du Plessis","Kane Williamson","Glenn Maxwell","Shreyas Iyer","Rishabh Pant","Sanju Samson"];
+const RN={Bt:"Batsman",Bw:"Bowler",Ar:"All-rounder",Wk:"Wicketkeeper"};
+const players=RAW.split("\n").map(l=>{const [n,r,f,t]=l.split("|");return{n,r:RN[r],f,t:t?t.split(","):[]}});
+const TN={M:"MI",R:"RCB",C:"CSK",S:"SRH"},FK={IPL:"I",ODI:"O",T20:"T"};
+let cfg={budget:50,n:8,fmt:"ALL",mode:"all",teams:new Set()};
+let N=8,B=50,pool=[],team=[[],[]],money=[50,50],bid=1,turn=0,selectedCat="All",soldTotal=0;
+let names=["Player 1","Player 2"],matchFormat="ALL",currentPlayer=null;
+const $=id=>document.getElementById(id);
+function base(){let l=players;if(cfg.fmt!=="ALL")l=l.filter(p=>p.f.includes(FK[cfg.fmt]));
+ if(cfg.mode==="og")l=l.filter(p=>OG.includes(p.n));return l}
+function chips(id,items,isOn,fn){$(id).innerHTML="";items.forEach(([v,label])=>{const b=document.createElement("button");b.className="chip"+(isOn(v)?" on":"");b.textContent=label;b.onclick=()=>{fn(v);drawSetup()};$(id).appendChild(b)})}
+function drawSetup(){
+ chips("budgetChips",[25,50,75,100,150].map(v=>[v,"₹"+v]),v=>cfg.budget===v,v=>{cfg.budget=v;$("customBudget").value=""});
+ chips("nChips",[4,5,6,7,8,9,10,11].map(v=>[v,v+" players"]),v=>cfg.n===v,v=>cfg.n=v);
+ chips("fmtChips",["ALL","IPL","ODI","T20"].map(v=>[v,v]),v=>cfg.fmt===v,v=>cfg.fmt=v);
+ chips("modeChips",[["all","All Players"],["og","🏆 IPL OG's"]],v=>cfg.mode===v,v=>cfg.mode=v);
+ const c=base().length,need=cfg.n*2,ok=c>=need&&cfg.budget>=cfg.n;
+ $("poolInfo").textContent=cfg.budget<cfg.n?"Budget must be at least ₹"+cfg.n+" (₹1 per player).":`Pool: ${c} players • needed: ${need} ${ok?"✅":"❌ pick a bigger pool or fewer players"}`;
+ $("startBtn").disabled=!ok;
+}
+$("customBudget").addEventListener("input",e=>{const v=Math.round(Number(e.target.value));if(v>=11&&v<=1000){cfg.budget=v;drawSetup()}});
+function openSetup(){$("setup").style.display="block";drawSetup()}
+function startGame(){
+ N=cfg.n;B=cfg.budget;matchFormat=cfg.fmt;pool=[...base()];team=[[],[]];money=[B,B];soldTotal=0;selectedCat="All";
+ document.querySelectorAll(".N").forEach(e=>e.textContent=N);
+ $("subline").textContent=`2 Players • ₹${B} each • Buy exactly ${N} players each`;
+ $("setup").style.display="none";$("comparison").style.display="none";$("bidSlider").disabled=false;
+ document.querySelectorAll(".formatBtn").forEach(btn=>btn.classList.toggle("secondary",btn.dataset.format!==matchFormat));
+ makeFilters();startPlayer();
+}
+function filtered(){return selectedCat==="All"?pool:pool.filter(p=>p.r===selectedCat)}
+function maxBid(i){return Math.max(1,money[i]-(N-team[i].length-1))}
+function full(i){return team[i].length>=N}
+function startPlayer(skipping){
+  let f=filtered();
+  if(!f.length){selectedCat="All"; f=pool; makeFilters()}
+  if(skipping===true&&f.length>1)f=f.filter(p=>p!==currentPlayer);
+  currentPlayer=f[Math.floor(Math.random()*f.length)];
+  bid=1; turn=full(0)?1:0;
+  showAvatar(currentPlayer);
+  $("playerName").textContent=currentPlayer.n; $("playerRole").textContent=currentPlayer.r;
+  $("playerTags").innerHTML=currentPlayer.t.map(t=>`<span class="tag t${t}">${TN[t]}</span>`).join("")+`<span class="tag tF">${currentPlayer.f.split("").map(c=>({I:"IPL",O:"ODI",T:"T20"})[c]).join(" • ")}</span>`;
+  $("currentBid").textContent="₹1"; $("bidText").textContent="1";
+  $("turn").textContent=names[turn]+"'s turn"; if(skipping!==true)$("notice").textContent=names[turn]+" starts. Raise the slider, then press SOLD when ready.";
+  updateSlider(); update();
+}
+function skipPlayer(){
+  if(!currentPlayer||(full(0)&&full(1)))return;
+  $("notice").textContent="⏭️ "+currentPlayer.n+" skipped!";
+  startPlayer(true);
+}
+function updateSlider(){
+  let max=maxBid(turn);
+  $("bidSlider").min=1; $("bidSlider").max=max; $("bidSlider").value=Math.min(bid,max);
+  $("bidText").textContent=$("bidSlider").value;
+}
+$("bidSlider").addEventListener("input",e=>{
+  bid=Number(e.target.value); $("bidText").textContent=bid; $("currentBid").textContent="₹"+bid;
+});
+function raiseBid(n){
+  bid=Math.min(maxBid(turn), bid+n);
+  $("bidSlider").value=bid; $("bidText").textContent=bid; $("currentBid").textContent="₹"+bid;
+}
+function passBid(){
+  let other=1-turn;
+  $("notice").textContent=names[turn]+" passed. "+names[other]+" can now set a bid.";
+  if(bid===1){ turn=full(other)?turn:other; $("turn").textContent=names[turn]+"'s turn"; updateSlider(); return; }
+  if(bid<=maxBid(other) && !full(other)){ sellTo(other); }
+  else { $("notice").textContent="That player cannot afford this bid."; turn=other; updateSlider(); }
+}
+function sold(){
+  if(bid>maxBid(turn)){ $("notice").textContent="Not enough money! (keep ₹1 for each remaining slot)"; return; }
+  sellTo(turn);
+}
+function sellTo(winner){
+  if(full(winner)){$("notice").textContent=`${names[winner]} already has ${N} players.`;return;}
+  money[winner]-=bid; team[winner].push({name:currentPlayer.n,role:currentPlayer.r,price:bid});
+  pool=pool.filter(p=>p!==currentPlayer); soldTotal++;
+  $("notice").textContent=`🏷️ ${currentPlayer.n} sold to ${names[winner]} for ₹${bid}!`;
+  update();
+  if(full(0)&&full(1)){finish();return;}
+  setTimeout(startPlayer,700);
+}
+function finish(){
+  if($("avatar"))$("avatar").innerHTML="";
+  $("playerName").textContent="AUCTION COMPLETE 🎉"; $("playerRole").textContent="Final Teams"; $("playerTags").innerHTML="";
+  $("currentBid").textContent="🏆"; $("turn").textContent=""; $("bidSlider").disabled=true;
+  let score=[team[0].reduce((s,x)=>s+x.price,0),team[1].reduce((s,x)=>s+x.price,0)];
+  compareTeams();
+  let msg=score[0]===score[1]?"It's a tie on spending!":score[0]<score[1]?names[0]+" saved more money!":names[1]+" saved more money!";
+  $("notice").textContent=`Both players have completed their ${N}-player teams! `+msg;
+}
+function update(){
+  $("money1").textContent="₹"+money[0];$("money2").textContent="₹"+money[1];
+  $("label1").textContent="👦 "+names[0]; $("label2").textContent="👦 "+names[1];
+  $("count1").textContent=team[0].length;$("count2").textContent=team[1].length;
+  const row=x=>`<div><span>${x.name}<br><span class="small">${x.role}</span></span><b>₹${x.price}</b></div>`;
+  $("team1").innerHTML=team[0].map(row).join("");$("team2").innerHTML=team[1].map(row).join("");
+  $("soldCount").textContent=soldTotal; $("remaining").textContent=2*N-soldTotal; $("pool").textContent="₹"+(money[0]+money[1]);
+  $("round").textContent=`Player ${Math.min(soldTotal+1,2*N)} of ${2*N}`;
+  $("bar").style.width=(soldTotal/(2*N)*100)+"%";
+}
+const PHOTOS={}; // optional: "Virat Kohli":"https://your-photo-url.jpg" (works when hosted on your own site)
+const STK={"Virat Kohli":"M,p,k,2,#d1122b,18","MS Dhoni":"M,s,k,1,#e8b800,7","Rohit Sharma":"M,s,k,1,#005da0,45","AB de Villiers":"L,s,n,0,#d1122b,17","Chris Gayle":"D,b,k,4,#d1122b,333","David Warner":"L,s,n,1,#f26522,31","Suresh Raina":"M,s,k,0,#e8b800,3","Shikhar Dhawan":"M,s,k,3,#f26522,25","KL Rahul":"M,l,k,1,#0aa5a0,1","Jos Buttler":"L,s,n,1,#e0529c,63","Andre Russell":"D,b,k,2,#6a2c91,12","Kieron Pollard":"D,b,k,2,#005da0,55","Ravindra Jadeja":"M,s,k,3,#e8b800,8","Hardik Pandya":"M,s,k,2,#005da0,33","Shane Watson":"L,s,n,1,#e8b800,33","Sunil Narine":"D,s,k,3,#6a2c91,74","Dwayne Bravo":"D,d,k,2,#e8b800,47","Rashid Khan":"M,c,k,1,#1b2a5c,19","Jasprit Bumrah":"M,c,k,1,#005da0,93","Lasith Malinga":"M,l,y,0,#005da0,99","Bhuvneshwar Kumar":"M,s,k,0,#f26522,15","Yuzvendra Chahal":"M,s,k,0,#e0529c,3","Ravichandran Ashwin":"M,s,k,3,#e8b800,99","Trent Boult":"L,s,n,1,#005da0,18","Kagiso Rabada":"D,s,k,0,#c8102e,25","Mitchell Starc":"L,s,y,0,#6a2c91,56","Dale Steyn":"L,s,n,1,#f26522,2","Imran Tahir":"T,b,w,2,#e8b800,99","Faf du Plessis":"L,s,n,1,#d1122b,18","Kane Williamson":"L,s,n,2,#f26522,22","Glenn Maxwell":"L,c,n,0,#d1122b,32","Shreyas Iyer":"M,s,k,1,#6a2c91,41","Rishabh Pant":"M,s,k,0,#1b6fd1,17","Sanju Samson":"M,s,k,1,#e0529c,11"};
+function stickerSvg(p){
+ const [sk,hs,hc,bd,jc,no]=STK[p.n].split(",");
+ const S={L:"#f1c9a5",M:"#d9a074",T:"#b97a4a",D:"#7a4a2c"}[sk],H={k:"#1b1b1b",n:"#5b3a24",y:"#e3c15a",r:"#b5551f",w:"#c9c9c9"}[hc];
+ const hair={s:`<path d="M38 46c-3-26 44-26 44 0-5-10-10-14-22-14s-17 4-22 14z" fill="${H}"/>`,
+  p:`<path d="M38 46l-2-14 8 6 4-12 8 8 6-10 6 10 8-6-2 18c-5-10-10-14-22-14s-12 4-14 14z" fill="${H}"/>`,
+  c:`<g fill="${H}">${[[40,36],[50,29],[62,28],[73,32],[80,42],[38,46],[82,50]].map(([x,y])=>`<circle cx="${x}" cy="${y}" r="9"/>`).join("")}</g>`,
+  l:`<path d="M37 50c-6-30 46-30 46 0v26h-8V46c-8-8-22-8-30 0v30h-8z" fill="${H}"/>`,
+  d:`<path d="M38 46c-3-26 44-26 44 0-5-10-10-14-22-14s-17 4-22 14z" fill="${H}"/><g stroke="${H}" stroke-width="5" stroke-linecap="round"><path d="M36 44v32M43 40v36M77 40v36M84 44v32"/></g>`,
+  b:`<ellipse cx="52" cy="34" rx="7" ry="3" fill="#fff" opacity=".25"/>`}[hs];
+ const beard={0:"",1:`<path d="M40 52c0 20 9 28 20 28s20-8 20-28c-4 12-12 14-20 14s-16-2-20-14z" fill="${H}" opacity=".35"/>`,
+  2:`<path d="M38 50c0 24 10 32 22 32s22-8 22-32c-5 12-12 14-22 14s-17-2-22-14z" fill="${H}"/>`,
+  3:`<path d="M48 61c5-4 19-4 24 0-5 3-19 3-24 0z" fill="${H}"/>`,
+  4:`<path d="M48 61c5-4 19-4 24 0-5 3-19 3-24 0z" fill="${H}"/><ellipse cx="60" cy="76" rx="7" ry="6" fill="${H}"/>`}[bd];
+ return `<svg viewBox="0 0 120 120"><defs><clipPath id="c"><circle cx="60" cy="60" r="58"/></clipPath></defs><g clip-path="url(#c)"><rect width="120" height="120" fill="#10264a"/><circle cx="60" cy="60" r="58" fill="${jc}" opacity=".35"/><path d="M12 125c2-26 22-36 48-36s46 10 48 36z" fill="${jc}"/><path d="M50 88l10 12 10-12" fill="none" stroke="#fff8" stroke-width="3"/><rect x="52" y="72" width="16" height="18" fill="${S}"/><ellipse cx="38" cy="54" rx="4" ry="6" fill="${S}"/><ellipse cx="82" cy="54" rx="4" ry="6" fill="${S}"/><ellipse cx="60" cy="52" rx="22" ry="26" fill="${S}"/>${beard}${hair}<g fill="#111"><circle cx="51" cy="50" r="2.6"/><circle cx="69" cy="50" r="2.6"/></g><path d="M46 44l9-2M65 42l9 2" stroke="#111" stroke-width="2.5" stroke-linecap="round"/><path d="M52 64q8 7 16 0" fill="#fff" stroke="#111" stroke-width="2" stroke-linecap="round"/><text x="60" y="112" text-anchor="middle" font-size="15" font-weight="bold" fill="#fff" font-family="sans-serif">${no}</text></g><circle cx="60" cy="60" r="58" fill="none" stroke="#fff" stroke-width="4"/></svg>`}
+function avatarSvg(p){
+ if(STK[p.n])return stickerSvg(p);
+ const col={M:"#005da0",R:"#d1122b",C:"#e8b800",S:"#f26522"}[p.t[0]]||"#2a6bd1";
+ const ini=p.n.split(" ").map(w=>w[0]).join("").slice(0,2).toUpperCase();
+ const ic={Batsman:"🏏",Bowler:"🎯","All-rounder":"⚡",Wicketkeeper:"🧤"}[p.r];
+ return `<svg viewBox="0 0 120 120"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#16345f"/><stop offset="1" stop-color="#0a1a33"/></linearGradient></defs><circle cx="60" cy="60" r="60" fill="url(#g)"/><path d="M18 112c4-26 22-36 42-36s38 10 42 36a60 60 0 0 1-84 0z" fill="${col}"/><circle cx="60" cy="46" r="21" fill="#e0ac82"/><path d="M38 42c2-18 42-18 44 0-10-8-34-8-44 0z" fill="#222"/><rect x="28" y="88" width="64" height="18" rx="9" fill="#000a"/><text x="60" y="101" text-anchor="middle" font-size="13" font-weight="bold" fill="#fff" font-family="sans-serif">${ini}</text><text x="96" y="28" font-size="18" text-anchor="middle">${ic}</text></svg>`}
+function showAvatar(p){
+ let a=$("avatar");if(!a){a=document.createElement("div");a.id="avatar";$("playerName").insertAdjacentElement("beforebegin",a)}
+ a.innerHTML=PHOTOS[p.n]?`<img src="${PHOTOS[p.n]}" alt="${p.n}" onerror="this.outerHTML=avatarSvg(currentPlayer)">`:avatarSvg(p);
+}
+function rate(t,k){const W=k==="bat"?{Batsman:3,Wicketkeeper:2.5,"All-rounder":2,Bowler:.5}:{Bowler:3,"All-rounder":2,Batsman:0,Wicketkeeper:0};return t.reduce((s,x)=>s+W[x.role]*(1+x.price*.05),0)}
+function bbReport(){
+ let b=$("bbBox");if(!b){b=document.createElement("div");b.id="bbBox";$("winnerText").insertAdjacentElement("afterend",b)}
+ const row=(k,icon,label)=>{const r=[rate(team[0],k),rate(team[1],k)],mx=Math.max(...r,1),w=r[0]===r[1]?"🤝 Both teams are equal":"✅ "+names[r[0]>r[1]?0:1]+" is best";
+  return `<div class="bb"><b>${icon} ${label}: ${w}</b>${[0,1].map(i=>`<div class="small" style="margin-top:6px">${names[i]} • ${r[i].toFixed(1)}</div><div class="bbbar"><i style="width:${r[i]/mx*100}%"></i></div>`).join("")}</div>`};
+ const top=team.map(t=>t.slice().sort((a,c)=>c.price-a.price)[0]);
+ b.innerHTML=row("bat","🏏","Batting")+row("bowl","🎯","Bowling")+`<div class="bb"><b>💎 Costliest buy</b><div class="small">${names[0]}: ${top[0].name} (₹${top[0].price})<br>${names[1]}: ${top[1].name} (₹${top[1].price})</div></div>`;
+}
+function setFormat(format){matchFormat=format;document.querySelectorAll(".formatBtn").forEach(btn=>btn.classList.toggle("secondary",btn.dataset.format!==format));if(full(0)&&full(1))compareTeams();$("notice").textContent="Format set to "+format+" 🏏";}
+function roleValue(role,format){const base={Batsman:10,Bowler:10,"All-rounder":11,Wicketkeeper:10}[role]||10;if(format==="T20")return role==="All-rounder"?12:base;if(format==="ODI")return role==="Bowler"||role==="All-rounder"?12:base;if(format==="IPL")return role==="Batsman"||role==="Wicketkeeper"?12:(role==="All-rounder"?11:base);return base;}
+function compareTeams(){const score=team.map(t=>{const roles={Batsman:0,Bowler:0,"All-rounder":0,Wicketkeeper:0};t.forEach(p=>roles[p.role]++);let s=t.reduce((sum,p)=>sum+roleValue(p.role,matchFormat),0);s+=Math.min(roles.Batsman,2)*2+Math.min(roles.Bowler,2)*2+Math.min(roles.Wicketkeeper,1)+Math.min(roles["All-rounder"],2)*2;return s;});$("comparison").style.display="block";$("score1").textContent=score[0];$("score2").textContent=score[1];$("scoreName1").textContent=names[0];$("scoreName2").textContent=names[1];$("formatName").textContent=matchFormat;$("winnerText").textContent=score[0]===score[1]?"🤝 It's a TIE!":score[0]>score[1]?"🏆 "+names[0]+" has the stronger team!":"🏆 "+names[1]+" has the stronger team!";bbReport();}
+document.querySelectorAll(".formatBtn").forEach(btn=>btn.addEventListener("click",()=>setFormat(btn.dataset.format)));
+function makeFilters(){
+  $("filters").innerHTML="";
+  ["All","Batsman","Bowler","All-rounder","Wicketkeeper"].forEach(c=>{
+    let b=document.createElement("button");b.textContent=c;b.className=c===selectedCat?"":"secondary";
+    b.onclick=()=>{selectedCat=c;makeFilters();startPlayer()};$("filters").appendChild(b);
+  });
+}
+function saveNames(){
+  names=[$("name1").value.trim()||"Player 1",$("name2").value.trim()||"Player 2"];
+  $("label1").textContent="👦 "+names[0]; $("label2").textContent="👦 "+names[1];
+  $("turn").textContent=names[turn]+"'s turn";
+  $("notice").textContent="Names saved! "+names[0]+" vs "+names[1]+" 🔥";
+}
+openSetup();
+</script>
+</body>
+</html>
