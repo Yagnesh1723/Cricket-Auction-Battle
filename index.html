@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>Cricket Auction Battle</title>
+<title>CRICKET DYNASTY - Multiplayer Cricket Auction</title>
 <style>
 *{box-sizing:border-box} body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#07152b,#102b52);color:#fff;min-height:100vh}
 .container{max-width:1100px;margin:auto;padding:18px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
@@ -66,12 +66,12 @@ body{padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-b
 .fighter.in .ring::after{content:"";position:absolute;inset:0;border-radius:50%;border:3px solid currentColor;animation:pulse 1.4s ease-out infinite}
 @keyframes pulse{0%{transform:scale(1);opacity:.9}100%{transform:scale(1.5);opacity:0}}
 .fname{font:900 clamp(20px,5.5vmin,34px) system-ui;letter-spacing:2px;text-transform:uppercase;color:#fff;text-shadow:0 0 14px #00d4ff;max-width:80vw;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.f2 .fname{text-shadow:0 0 14px #ff9d2e}
-#vs{position:relative;opacity:0;font:900 italic clamp(60px,18vmin,150px) system-ui;color:#fff;text-shadow:0 0 20px #ff3d6e,0 0 50px #ff9d2e,0 0 90px #ff3d6e}
-#vs.hit{animation:slam .7s cubic-bezier(.2,1.6,.4,1) forwards,vsp 1.2s .7s ease-in-out infinite alternate}
+.vsb{position:relative;opacity:0;font:900 italic clamp(60px,18vmin,150px) system-ui;color:#fff;text-shadow:0 0 20px #ff3d6e,0 0 50px #ff9d2e,0 0 90px #ff3d6e}
+.vsb.hit{animation:slam .7s cubic-bezier(.2,1.6,.4,1) forwards,vsp 1.2s .7s ease-in-out infinite alternate}
 @keyframes slam{0%{opacity:0;transform:scale(5) rotate(-8deg)}60%{opacity:1;transform:scale(.88)}100%{opacity:1;transform:scale(1)}}
 @keyframes vsp{to{transform:scale(1.08);text-shadow:0 0 30px #ff3d6e,0 0 80px #ff9d2e,0 0 120px #ff3d6e}}
-#vs::after{content:"";position:absolute;left:50%;top:50%;width:20px;height:20px;border:4px solid #fff;border-radius:50%;opacity:0}
-#vs.hit::after{animation:sw .9s ease-out .3s}
+.vsb::after{content:"";position:absolute;left:50%;top:50%;width:20px;height:20px;border:4px solid #fff;border-radius:50%;opacity:0}
+.vsb.hit::after{animation:sw .9s ease-out .3s}
 @keyframes sw{0%{opacity:.9;transform:translate(-50%,-50%) scale(0)}100%{opacity:0;transform:translate(-50%,-50%) scale(30)}}
 #intro.shake #stage{animation:shake .5s}
 @keyframes shake{0%,100%{transform:none}20%{transform:translate(-8px,5px)}40%{transform:translate(7px,-6px)}60%{transform:translate(-5px,-4px)}80%{transform:translate(5px,4px)}}
@@ -109,31 +109,134 @@ body{padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-b
 .fbtns{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}.plist{opacity:.85;margin:8px 0;line-height:1.5}
 #hist{display:none;position:fixed;inset:0;z-index:19;background:#02050cee;overflow:auto;padding:16px}#hist .fgl{max-width:560px;margin:auto;text-align:left}.hr{padding:6px 0;border-bottom:1px solid #ffffff14;font-size:14px}
 #skipIntro{position:absolute;top:calc(env(safe-area-inset-top,0px) + 10px);right:10px;z-index:3;padding:8px 14px;background:#ffffff22;color:#fff;border:1px solid #fff5;border-radius:99px}
+
+.ring{color:var(--pc,#00d4ff)}.ring::before{background:conic-gradient(var(--pc,#00d4ff),#fff,var(--pc,#00d4ff))!important;box-shadow:0 0 28px var(--pc,#00d4ff),0 0 60px var(--pc,#00d4ff)!important}
+.fname{text-shadow:0 0 14px var(--pc,#00d4ff)!important}
+.fighter.in.dL{animation:inL 1s cubic-bezier(.2,.9,.2,1) forwards}.fighter.in.dR{animation:inR 1.1s cubic-bezier(.2,.8,.2,1) forwards}
+.fighter.in.dT{animation:inT .9s cubic-bezier(.2,.9,.2,1) forwards}.fighter.in.dB{animation:inB .9s cubic-bezier(.2,.9,.2,1) forwards}.fighter.in.dZ{animation:inZ .9s cubic-bezier(.2,1.4,.4,1) forwards}
+@keyframes inT{0%{opacity:0;transform:translateY(-110vh) scale(.6)}100%{opacity:1;transform:none}}@keyframes inB{0%{opacity:0;transform:translateY(110vh) scale(.6)}100%{opacity:1;transform:none}}
+@keyframes inZ{0%{opacity:0;transform:scale(3);filter:blur(12px)}100%{opacity:1;transform:none;filter:blur(0)}}
+#stage.many{flex-direction:row!important;flex-wrap:wrap;gap:8px 12px!important;padding:0 8px}.many .ring{--d:min(21vmin,118px)}.many .fname{font-size:clamp(13px,3.6vmin,20px)}.many .vsb{font-size:clamp(22px,6vmin,40px)}
+#players::before{content:'';position:fixed;inset:-20%;background:radial-gradient(circle at 20% 30%,#00d4ff22,transparent 30%),radial-gradient(circle at 80% 70%,#ff9d2e22,transparent 30%),radial-gradient(circle at 60% 20%,#a66bff22,transparent 25%);animation:orb 8s ease-in-out infinite alternate;pointer-events:none}@keyframes orb{to{transform:translate(4%,-3%) scale(1.1)}}
+.pwrap{position:relative;z-index:1}.ptitle{background-size:200% 100%;animation:shine 3s linear infinite}@keyframes shine{to{background-position:200% 0}}
+.pcards{display:grid!important;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:14px;perspective:800px}
+.pcard{--pc:#00d4ff;border-top:3px solid var(--pc);box-shadow:0 10px 30px #0008}.pcard.enter{animation:cardIn .8s cubic-bezier(.2,1.3,.4,1) both;animation-delay:calc(var(--i)*130ms)}
+@keyframes cardIn{from{opacity:0;transform:rotateX(-80deg) translateY(40px) scale(.8)}}.pcard .ring{--d:96px}.pcard .plabel{color:var(--pc)}
+.badge{position:absolute;right:-4px;bottom:-4px;width:30px;height:30px;border-radius:50%;background:var(--pc);color:#00101c;font-weight:900;display:grid;place-items:center;border:2px solid #07152b;z-index:2}.badge.pop{animation:bpop .4s}@keyframes bpop{50%{transform:scale(1.6) rotate(12deg)}}
+.pname:focus{outline:0;border-color:var(--pc)!important;box-shadow:0 0 14px var(--pc)}#pStart{animation:sp 1.4s ease-in-out infinite alternate}@keyframes sp{to{box-shadow:0 0 24px #00d4ff}}
+.pads{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:10px;margin-top:10px}
+.pad{background:#ffffff0d;border:2px solid #ffffff18;border-radius:14px;padding:10px;transition:.3s;opacity:.55}
+.pad.act{opacity:1;border-color:var(--pc);box-shadow:0 0 22px var(--pc);transform:scale(1.02);animation:pp 1.1s ease-in-out infinite alternate}@keyframes pp{to{box-shadow:0 0 34px var(--pc)}}
+.pad.lead{border-color:#ffd34d}.pad.out{opacity:.3}.pad.fullp{opacity:.35}
+.pn{font-weight:900;color:var(--pc);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.pm{font-size:12px;color:#b9c9df;margin-bottom:8px}
+.pb{display:grid;grid-template-columns:1fr 1fr;gap:6px}.pb button{padding:9px 4px;font-size:13px}.pad.act .pb button:not(:disabled):not(.secondary){background:var(--pc);color:#00101c}
+.cards2{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px;margin-top:14px}.tp{border-top:3px solid var(--pc)}.tp.gl{box-shadow:0 0 0 2px var(--pc),0 0 30px var(--pc)!important;transition:.3s}
+.bump{animation:bump .35s}@keyframes bump{50%{transform:scale(1.25);color:#ffd34d}}
+.fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;width:100%}.fsc{display:grid;gap:8px;width:100%;align-items:center}.fsc .fbig{font-size:clamp(22px,6vw,40px)}.fsc .ftn{font-size:13px}
+.fgl.ft2{border-top:3px solid #3ddc84}.fgl.ft3{border-top:3px solid #ff4d8d}.fgl.ft4{border-top:3px solid #a66bff}
+.trow{align-items:center}
+
+/* CRICKET DYNASTY opening splash — visual only, game logic unchanged */
+#dynastySplash{
+  position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;
+  overflow:hidden;background:
+    radial-gradient(circle at 50% 45%,#163b78 0%,#07152b 38%,#02050c 78%);
+  transition:opacity .7s ease,visibility .7s ease;
+}
+#dynastySplash.hide{opacity:0;visibility:hidden;pointer-events:none}
+#dynastySplash .ds-grid{
+  position:absolute;inset:0;opacity:.22;
+  background-image:linear-gradient(#00d4ff18 1px,transparent 1px),
+                   linear-gradient(90deg,#00d4ff18 1px,transparent 1px);
+  background-size:42px 42px;transform:perspective(500px) rotateX(58deg) scale(1.8);
+  transform-origin:center bottom;animation:dsGrid 4s linear infinite;
+}
+@keyframes dsGrid{to{background-position:0 42px,42px 0}}
+#dynastySplash .ds-glow{
+  position:absolute;width:min(90vw,700px);height:min(90vw,700px);border-radius:50%;
+  background:radial-gradient(circle,#00d4ff22 0%,#ff9d2e12 35%,transparent 68%);
+  animation:dsPulse 1.8s ease-in-out infinite alternate;
+}
+@keyframes dsPulse{to{transform:scale(1.18);filter:blur(3px)}}
+#dynastySplash .ds-content{position:relative;text-align:center;padding:20px}
+#dynastySplash .ds-crown{
+  font-size:clamp(38px,10vw,72px);opacity:0;transform:translateY(-35px) scale(.5);
+  animation:dsCrown .7s .15s cubic-bezier(.2,1.5,.4,1) forwards;
+  filter:drop-shadow(0 0 22px #f5c542);
+}
+@keyframes dsCrown{to{opacity:1;transform:none}}
+#dynastySplash .ds-title{
+  margin:8px 0 0;font:900 clamp(42px,11vw,92px)/.95 system-ui,sans-serif;
+  letter-spacing:clamp(3px,1.2vw,12px);text-transform:uppercase;
+  color:transparent;background:linear-gradient(90deg,#00d4ff,#fff,#f5c542,#fff,#00d4ff);
+  background-size:250% 100%;-webkit-background-clip:text;background-clip:text;
+  text-shadow:0 0 35px #00d4ff55;
+  opacity:0;transform:scale(.65);
+  animation:dsTitle 1s .45s cubic-bezier(.15,1.35,.3,1) forwards,dsShine 2.2s 1.1s linear infinite;
+}
+@keyframes dsTitle{to{opacity:1;transform:scale(1)}}
+@keyframes dsShine{to{background-position:250% 0}}
+#dynastySplash .ds-line{
+  width:min(520px,78vw);height:3px;margin:18px auto 12px;border-radius:99px;
+  background:linear-gradient(90deg,transparent,#00d4ff,#f5c542,#00d4ff,transparent);
+  transform:scaleX(0);animation:dsLine .8s .9s ease-out forwards;
+  box-shadow:0 0 18px #00d4ff;
+}
+@keyframes dsLine{to{transform:scaleX(1)}}
+#dynastySplash .ds-tag{
+  font:800 clamp(13px,3.2vw,20px) system-ui,sans-serif;letter-spacing:clamp(3px,1vw,8px);
+  color:#dcecff;opacity:0;transform:translateY(14px);
+  animation:dsTag .7s 1.05s ease-out forwards;
+}
+@keyframes dsTag{to{opacity:1;transform:none}}
+#dynastySplash .ds-spark{
+  position:absolute;width:5px;height:5px;border-radius:50%;background:#fff;
+  box-shadow:0 0 12px #00d4ff;animation:dsSpark 2.2s linear infinite;
+}
+@keyframes dsSpark{
+  0%{transform:translateY(20vh) scale(.3);opacity:0}
+  20%{opacity:1}100%{transform:translateY(-80vh) translateX(80px) scale(1);opacity:0}
+}
+
 </style>
 </head>
 <body>
+
+<div id="dynastySplash" aria-label="CRICKET DYNASTY">
+  <div class="ds-grid"></div>
+  <div class="ds-glow"></div>
+  <div class="ds-spark" style="left:12%;bottom:5%;animation-delay:.1s"></div>
+  <div class="ds-spark" style="left:28%;bottom:2%;animation-delay:.8s"></div>
+  <div class="ds-spark" style="left:71%;bottom:4%;animation-delay:.4s"></div>
+  <div class="ds-spark" style="left:88%;bottom:7%;animation-delay:1.2s"></div>
+  <div class="ds-content">
+    <div class="ds-crown">👑</div>
+    <div class="ds-title">CRICKET DYNASTY</div>
+    <div class="ds-line"></div>
+    <div class="ds-tag">BID • BUILD • RULE</div>
+  </div>
+</div>
+
+
 <div id="players"><div class="pwrap">
-<h1 class="ptitle">PLAYER SETUP</h1><div class="small">Enter your names to begin</div>
-<div class="pcards">
-<div class="pcard"><div class="plabel">PLAYER 1</div><div class="ring r1"><img id="pimg0" alt=""></div><input class="pname" id="pname0" maxlength="14" placeholder="Enter Player 1 name"></div>
-<div class="pcard"><div class="plabel">PLAYER 2</div><div class="ring r2"><img id="pimg1" alt=""></div><input class="pname" id="pname1" maxlength="14" placeholder="Enter Player 2 name"></div>
-</div><div class="center-actions"><button id="pStart" onclick="startIntro()">▶ START</button></div></div></div>
-<div id="soldFx"></div><div id="fin"><div id="finBox"></div></div><div id="hist"><div class="fgl"><h3 style="margin-top:0">📜 Auction History</h3><div id="hlist"></div><div class="center-actions" style="margin-top:12px"><button onclick="$('hist').style.display='none'">Close</button></div></div></div>
-<div id="intro"><canvas id="introFx"></canvas><div class="beam b1"></div><div class="beam b2"></div><div class="crowd"></div><div class="eq" id="eq"></div>
-<div id="stage"><div class="fighter f1" id="f1"><div class="ring r1"><img id="iimg0" alt=""></div><div class="fname" id="iname0"></div></div><div id="vs">VS</div><div class="fighter f2" id="f2"><div class="ring r2"><img id="iimg1" alt=""></div><div class="fname" id="iname1"></div></div></div>
-<div id="banner"></div><div id="flash"></div><button id="skipIntro" onclick="endIntro()">Skip Intro ⏭</button></div>
+<h1 class="ptitle">PLAYER SETUP</h1><div class="small">Choose 2 to 5 players and enter their names</div>
+<div class="chips" id="pcount" style="justify-content:center"></div>
+<div class="pcards" id="pcards"></div>
+<div class="center-actions"><button id="pStart" onclick="startIntro()">▶ START</button></div></div></div>
+<div id="soldFx"></div><div id="fin"><div id="finBox"></div></div>
+<div id="hist"><div class="fgl"><h3 style="margin-top:0">📜 Auction History</h3><div id="hlist"></div><div class="center-actions" style="margin-top:12px"><button onclick="$('hist').style.display='none'">Close</button></div></div></div>
+<div id="intro"><canvas id="introFx"></canvas><div class="beam b1"></div><div class="beam b2"></div><div class="crowd"></div><div class="eq" id="eq"></div><div id="stage"></div><div id="banner"></div><div id="flash"></div><button id="skipIntro" onclick="endIntro()">Skip Intro ⏭</button></div>
 <div id="setup"><div class="card">
 <h2 style="margin:4px 0;text-align:center">🏏 Auction Setup</h2>
 <div class="sec">💰 Select Budget (each player)</div>
 <div class="chips" id="budgetChips"></div>
 <div class="small" style="margin:-8px 0 12px">Custom: ₹ <input type="number" id="customBudget" min="11" max="1000" placeholder="e.g. 80"></div>
-<div class="sec">👥 How many players each? (min 4 – max 11)</div>
+<div class="sec">👥 How many players each team? (min 4 – max 11)</div>
 <div class="chips" id="nChips"></div>
 <div class="sec">🏆 Format</div>
 <div class="chips" id="fmtChips"></div>
 <div class="sec">🏆 Player Pool</div>
 <div class="chips" id="modeChips"></div>
-
 <div class="small" id="poolInfo" style="text-align:center;margin-bottom:10px"></div>
 <div class="center-actions"><button id="startBtn" onclick="startGame()">🚀 Start Auction</button> <button class="secondary" onclick="openPlayers()">👥 Change Players</button></div>
 </div></div>
@@ -143,67 +246,32 @@ body{padding-top:env(safe-area-inset-top,0);padding-bottom:env(safe-area-inset-b
     <div><h1>🏏 Cricket Auction Battle</h1><div class="sub" id="subline"></div></div>
     <button class="danger" onclick="openSetup()">⚙️ Restart / Setup</button>
   </div>
-
+  <div class="card player" style="margin-top:14px">
+    <div class="small" id="round"></div>
+    <h2 id="playerName">Player</h2>
+    <span class="role" id="playerRole">Batsman</span><div id="playerTags"></div>
+    <div class="price" id="currentBid">BASE ₹1</div>
+    <div class="small" id="leaderLine"></div>
+    <div class="turn" id="turn"></div>
+    <div class="center-actions"><button class="secondary" onclick="skipPlayer()">SKIP ⏭️</button><button onclick="sold()">SOLD 🏷️</button></div>
+    <div class="notice" id="notice"></div>
+    <div class="progress"><div class="bar" id="bar"></div></div>
+    <div class="stats">
+      <div class="stat"><b id="soldCount">0</b><br><span class="small">Sold</span></div>
+      <div class="stat"><b id="remaining">0</b><br><span class="small">Slots left</span></div>
+      <div class="stat"><b id="pool">₹0</b><br><span class="small">Money left</span></div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px"><b>🎯 Bid Pads — each player has their own buttons</b><div class="pads" id="pads"></div></div>
+  <div class="cards2" id="teams"></div>
+  <div class="card" id="comparison" style="margin-top:14px;display:none"><h2 style="text-align:center;margin:5px 0">🏆 Final Team Ranking (<span id="formatName">ALL</span>)</h2><div class="winner" id="winnerText"></div></div>
   <div class="card" style="margin-top:14px">
-    <b>✏️ Player Names</b>
-    <div class="center-actions">
-      <input id="name1" type="text" value="Player 1" maxlength="18" placeholder="Player 1 name" style="padding:11px;border-radius:10px;border:0;width:180px">
-      <input id="name2" type="text" value="Player 2" maxlength="18" placeholder="Player 2 name" style="padding:11px;border-radius:10px;border:0;width:180px">
-      <button onclick="saveNames()">Save Names</button>
-    </div>
-  </div>
-
-  <div class="cards">
-    <div class="card">
-      <h3 id="label1">👦 Brother 1</h3><div class="money" id="money1">₹50</div>
-      <div class="small">Players: <span id="count1">0</span>/<span class="N">8</span></div>
-      <div class="teamlist" id="team1"></div>
-    </div>
-
-    <div class="card player">
-      <div class="small" id="round">Player 1</div>
-      <h2 id="playerName">Virat Kohli</h2>
-      <span class="role" id="playerRole">Batsman</span><div id="playerTags"></div>
-      <div class="price" id="currentBid">₹1</div>
-      <div class="turn" id="turn">Brother 1's turn</div>
-      <div class="controls">
-        <div class="bidvalue">Bid: ₹<span id="bidText">1</span></div>
-        <input id="bidSlider" type="range" min="1" max="50" value="1" step="1">
-        <div class="center-actions">
-          <button onclick="raiseBid(1)">+ ₹1</button>
-          <button onclick="raiseBid(2)">+ ₹2</button>
-          <button onclick="raiseBid(5)">+ ₹5</button>
-          <button class="secondary" onclick="passBid()">PASS</button>
-          <button class="secondary" onclick="skipPlayer()">SKIP ⏭️</button>
-          <button onclick="sold()">SOLD 🏷️</button>
-        </div>
-      </div>
-      <div class="notice" id="notice">Set your bid and press SOLD when the other brother passes.</div>
-      <div class="progress"><div class="bar" id="bar"></div></div>
-      <div class="stats">
-        <div class="stat"><b id="soldCount">0</b><br><span class="small">Sold</span></div>
-        <div class="stat"><b id="remaining">16</b><br><span class="small">Slots left</span></div>
-        <div class="stat"><b id="pool">₹100</b><br><span class="small">Money left</span></div>
-      </div>
-    </div>
-
-    <div class="card">
-      <h3 id="label2">👦 Brother 2</h3><div class="money" id="money2">₹50</div>
-      <div class="small">Players: <span id="count2">0</span>/<span class="N">8</span></div>
-      <div class="teamlist" id="team2"></div>
-    </div>
-  </div>
-
-  <div class="card" id="comparison" style="margin-top:14px;display:none"><h2 style="text-align:center;margin:5px 0">🏆 Final Team Comparison</h2><div class="stats"><div class="stat"><b id="score1">0</b><br><span id="scoreName1">Player 1</span></div><div class="stat"><b>VS</b><br><span id="formatName">ALL</span></div><div class="stat"><b id="score2">0</b><br><span id="scoreName2">Player 2</span></div></div><div class="winner" id="winnerText"></div></div>
-
-<div class="card" style="margin-top:14px">
     <b>🏆 Match Format</b><div class="center-actions"><button class="formatBtn" data-format="IPL">IPL</button><button class="formatBtn secondary" data-format="ODI">ODI</button><button class="formatBtn secondary" data-format="T20">T20</button><button class="formatBtn secondary" data-format="ALL">ALL</button></div><div class="small" style="text-align:center;margin-top:8px">Choose the format for the final team comparison.</div>
     <b>Player Pool</b>
     <div class="filters" id="filters"></div>
     <div class="small">Categories: Batsman • Bowler • All-rounder • Wicketkeeper. The auction picks from the selected pool.</div>
   </div>
 </div>
-
 <script>
 const RAW=`Virat Kohli|Bt|IOT|R
 Rohit Sharma|Bt|IOT|M
@@ -298,10 +366,16 @@ const OG=["Virat Kohli","MS Dhoni","Rohit Sharma","AB de Villiers","Chris Gayle"
 const RN={Bt:"Batsman",Bw:"Bowler",Ar:"All-rounder",Wk:"Wicketkeeper"};
 const players=RAW.split("\n").map(l=>{const [n,r,f,t]=l.split("|");return{n,r:RN[r],f,t:t?t.split(","):[]}});
 const TN={M:"MI",R:"RCB",C:"CSK",S:"SRH"},FK={IPL:"I",ODI:"O",T20:"T"};
-let cfg={budget:50,n:8,fmt:"ALL",mode:"all",teams:new Set()};
-let N=8,B=50,pool=[],team=[[],[]],money=[50,50],bid=1,turn=0,selectedCat="All",soldTotal=0;
-let names=["Player 1","Player 2"],matchFormat="ALL",currentPlayer=null;
+
+
 const $=id=>document.getElementById(id);
+const PC=['#00d4ff','#ff9d2e','#3ddc84','#ff4d8d','#a66bff'];
+let P=2,names=[];
+let cfg={budget:50,n:8,fmt:'ALL',mode:'all'};
+let N=8,B=50,pool=[],team=[],money=[],price=1,leader=-1,turn=-1,passed=new Set(),lot=0,selectedCat='All',soldTotal=0,matchFormat='ALL',currentPlayer=null,busy=false;
+try{const s=JSON.parse(localStorage.getItem('cab_multi')||'null');if(s&&s.P>=2&&s.P<=5){P=s.P;names=Array.isArray(s.names)?s.names:[]}}catch(e){}
+function saveSaved(){try{localStorage.setItem('cab_multi',JSON.stringify({P,names}))}catch(e){}}
+
 function base(){let l=players;if(cfg.fmt!=="ALL")l=l.filter(p=>p.f.includes(FK[cfg.fmt]));
  if(cfg.mode==="og")l=l.filter(p=>OG.includes(p.n));return l}
 function chips(id,items,isOn,fn){$(id).innerHTML="";items.forEach(([v,label])=>{const b=document.createElement("button");b.className="chip"+(isOn(v)?" on":"");b.textContent=label;b.onclick=()=>{fn(v);drawSetup()};$(id).appendChild(b)})}
@@ -310,92 +384,16 @@ function drawSetup(){
  chips("nChips",[4,5,6,7,8,9,10,11].map(v=>[v,v+" players"]),v=>cfg.n===v,v=>cfg.n=v);
  chips("fmtChips",["ALL","IPL","ODI","T20"].map(v=>[v,v]),v=>cfg.fmt===v,v=>cfg.fmt=v);
  chips("modeChips",[["all","All Players"],["og","🏆 IPL OG's"]],v=>cfg.mode===v,v=>cfg.mode=v);
- const c=base().length,need=cfg.n*2,ok=c>=need&&cfg.budget>=cfg.n;
+ const c=base().length,need=cfg.n*P,ok=c>=need&&cfg.budget>=cfg.n;
  $("poolInfo").textContent=cfg.budget<cfg.n?"Budget must be at least ₹"+cfg.n+" (₹1 per player).":`Pool: ${c} players • needed: ${need} ${ok?"✅":"❌ pick a bigger pool or fewer players"}`;
  $("startBtn").disabled=!ok;
 }
 $("customBudget").addEventListener("input",e=>{const v=Math.round(Number(e.target.value));if(v>=11&&v<=1000){cfg.budget=v;drawSetup()}});
 function openSetup(){$("setup").style.display="block";drawSetup()}
-function startGame(){
- N=cfg.n;B=cfg.budget;matchFormat=cfg.fmt;pool=[...base()];team=[[],[]];money=[B,B];soldTotal=0;selectedCat="All";HIST=[];hideFin();
- document.querySelectorAll(".N").forEach(e=>e.textContent=N);
- $("subline").textContent=`2 Players • ₹${B} each • Buy exactly ${N} players each`;
- $("setup").style.display="none";$("comparison").style.display="none";$("bidSlider").disabled=false;
- document.querySelectorAll(".formatBtn").forEach(btn=>btn.classList.toggle("secondary",btn.dataset.format!==matchFormat));
- makeFilters();startPlayer();
-}
-function filtered(){return selectedCat==="All"?pool:pool.filter(p=>p.r===selectedCat)}
-function maxBid(i){return Math.max(1,money[i]-(N-team[i].length-1))}
-function full(i){return team[i].length>=N}
-function startPlayer(skipping){
-  let f=filtered();
-  if(!f.length){selectedCat="All"; f=pool; makeFilters()}
-  if(skipping===true&&f.length>1)f=f.filter(p=>p!==currentPlayer);
-  currentPlayer=f[Math.floor(Math.random()*f.length)];
-  bid=1; turn=full(0)?1:0;
-  showAvatar(currentPlayer);
-  $("playerName").textContent=currentPlayer.n; $("playerRole").textContent=currentPlayer.r;
-  $("playerTags").innerHTML=currentPlayer.t.map(t=>`<span class="tag t${t}">${TN[t]}</span>`).join("")+`<span class="tag tF">${currentPlayer.f.split("").map(c=>({I:"IPL",O:"ODI",T:"T20"})[c]).join(" • ")}</span>`;
-  $("currentBid").textContent="₹1"; $("bidText").textContent="1";
-  $("turn").textContent=names[turn]+"'s turn"; if(skipping!==true)$("notice").textContent=names[turn]+" starts. Raise the slider, then press SOLD when ready.";
-  updateSlider(); update();
-}
-function skipPlayer(){
-  if(!currentPlayer||(full(0)&&full(1)))return;
-  $("notice").textContent="⏭️ "+currentPlayer.n+" skipped!";
-  passFx(currentPlayer,()=>startPlayer(true));
-}
-function updateSlider(){
-  let max=maxBid(turn);
-  $("bidSlider").min=1; $("bidSlider").max=max; $("bidSlider").value=Math.min(bid,max);
-  $("bidText").textContent=$("bidSlider").value;
-}
-$("bidSlider").addEventListener("input",e=>{
-  bid=Number(e.target.value); $("bidText").textContent=bid; $("currentBid").textContent="₹"+bid;
-});
-function raiseBid(n){
-  bid=Math.min(maxBid(turn), bid+n);
-  $("bidSlider").value=bid; $("bidText").textContent=bid; $("currentBid").textContent="₹"+bid;
-}
-function passBid(){
-  let other=1-turn;
-  $("notice").textContent=names[turn]+" passed. "+names[other]+" can now set a bid.";
-  if(bid===1){ turn=full(other)?turn:other; $("turn").textContent=names[turn]+"'s turn"; updateSlider(); return; }
-  if(bid<=maxBid(other) && !full(other)){ sellTo(other); }
-  else { $("notice").textContent="That player cannot afford this bid."; turn=other; updateSlider(); }
-}
-function sold(){
-  if(bid>maxBid(turn)){ $("notice").textContent="Not enough money! (keep ₹1 for each remaining slot)"; return; }
-  sellTo(turn);
-}
-function sellTo(winner){
-  if(full(winner)){$("notice").textContent=`${names[winner]} already has ${N} players.`;return;}
-  const oldM=money[winner]; money[winner]-=bid; team[winner].push({name:currentPlayer.n,role:currentPlayer.r,price:bid});
-  pool=pool.filter(p=>p!==currentPlayer); soldTotal++;
-  $("notice").textContent=`🏷️ ${currentPlayer.n} sold to ${names[winner]} for ₹${bid}!`;
-  HIST.push({n:currentPlayer.n,role:currentPlayer.r,to:winner,price:bid});
-  soldFx(winner,{name:currentPlayer.n,role:currentPlayer.r,price:bid},oldM,()=>{if(full(0)&&full(1))finish();else startPlayer()});
-}
-function finish(){
-  if($("avatar"))$("avatar").innerHTML="";
-  $("playerName").textContent="AUCTION COMPLETE 🎉"; $("playerRole").textContent="Final Teams"; $("playerTags").innerHTML="";
-  $("currentBid").textContent="🏆"; $("turn").textContent=""; $("bidSlider").disabled=true;
-  let score=[team[0].reduce((s,x)=>s+x.price,0),team[1].reduce((s,x)=>s+x.price,0)];
-  compareTeams();
-  let msg=score[0]===score[1]?"It's a tie on spending!":score[0]<score[1]?names[0]+" saved more money!":names[1]+" saved more money!";
-  $("notice").textContent=`Both players have completed their ${N}-player teams! `+msg;
-  setTimeout(finale,800);
-}
-function update(){
-  $("money1").textContent="₹"+money[0];$("money2").textContent="₹"+money[1];
-  setLabels();
-  $("count1").textContent=team[0].length;$("count2").textContent=team[1].length;
-  const row=x=>`<div><span>${x.name}<br><span class="small">${x.role}</span></span><b>₹${x.price}</b></div>`;
-  $("team1").innerHTML=team[0].map(row).join("");$("team2").innerHTML=team[1].map(row).join("");
-  $("soldCount").textContent=soldTotal; $("remaining").textContent=2*N-soldTotal; $("pool").textContent="₹"+(money[0]+money[1]);
-  $("round").textContent=`Player ${Math.min(soldTotal+1,2*N)} of ${2*N}`;
-  $("bar").style.width=(soldTotal/(2*N)*100)+"%";
-}
+
+const AVC=[["#00d4ff","#0a5cff"],["#ff9d2e","#ff3d6e"],["#3ddc84","#0c8f56"],["#ff4d8d","#b3125a"],["#a66bff","#5b2bd1"]];
+function defAv(i){const [a,b]=AVC[i];return "data:image/svg+xml,"+encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='${a}'/><stop offset='1' stop-color='${b}'/></linearGradient></defs><rect width='120' height='120' fill='#0b1a33'/><circle cx='60' cy='60' r='58' fill='url(#g)' opacity='.25'/><path d='M14 124c3-28 22-40 46-40s43 12 46 40z' fill='url(#g)'/><rect x='52' y='72' width='16' height='16' fill='#c98f65'/><ellipse cx='60' cy='54' rx='19' ry='22' fill='#d9a074'/><path d='M40 50c0-24 40-24 40 0z' fill='url(#g)'/><path d='M38 50h58c0 6-8 8-58 8z' fill='url(#g)'/><circle cx='52' cy='60' r='2.4' fill='#111'/><circle cx='68' cy='60' r='2.4' fill='#111'/><path d='M52 70q8 6 16 0' stroke='#111' stroke-width='2' fill='none'/><path d='M42 64c0 16 8 22 18 22s18-6 18-22c-4 9-10 11-18 11s-14-2-18-11z' fill='#2a1a10' opacity='.5'/></svg>`)}
+
 const PHOTOS={}; // optional: "Virat Kohli":"https://your-photo-url.jpg" (works when hosted on your own site)
 const STK={"Virat Kohli":"M,p,k,2,#d1122b,18","MS Dhoni":"M,s,k,1,#e8b800,7","Rohit Sharma":"M,s,k,1,#005da0,45","AB de Villiers":"L,s,n,0,#d1122b,17","Chris Gayle":"D,b,k,4,#d1122b,333","David Warner":"L,s,n,1,#f26522,31","Suresh Raina":"M,s,k,0,#e8b800,3","Shikhar Dhawan":"M,s,k,3,#f26522,25","KL Rahul":"M,l,k,1,#0aa5a0,1","Jos Buttler":"L,s,n,1,#e0529c,63","Andre Russell":"D,b,k,2,#6a2c91,12","Kieron Pollard":"D,b,k,2,#005da0,55","Ravindra Jadeja":"M,s,k,3,#e8b800,8","Hardik Pandya":"M,s,k,2,#005da0,33","Shane Watson":"L,s,n,1,#e8b800,33","Sunil Narine":"D,s,k,3,#6a2c91,74","Dwayne Bravo":"D,d,k,2,#e8b800,47","Rashid Khan":"M,c,k,1,#1b2a5c,19","Jasprit Bumrah":"M,c,k,1,#005da0,93","Lasith Malinga":"M,l,y,0,#005da0,99","Bhuvneshwar Kumar":"M,s,k,0,#f26522,15","Yuzvendra Chahal":"M,s,k,0,#e0529c,3","Ravichandran Ashwin":"M,s,k,3,#e8b800,99","Trent Boult":"L,s,n,1,#005da0,18","Kagiso Rabada":"D,s,k,0,#c8102e,25","Mitchell Starc":"L,s,y,0,#6a2c91,56","Dale Steyn":"L,s,n,1,#f26522,2","Imran Tahir":"T,b,w,2,#e8b800,99","Faf du Plessis":"L,s,n,1,#d1122b,18","Kane Williamson":"L,s,n,2,#f26522,22","Glenn Maxwell":"L,c,n,0,#d1122b,32","Shreyas Iyer":"M,s,k,1,#6a2c91,41","Rishabh Pant":"M,s,k,0,#1b6fd1,17","Sanju Samson":"M,s,k,1,#e0529c,11"};
 function stickerSvg(p){
@@ -422,67 +420,19 @@ function showAvatar(p){
  let a=$("avatar");if(!a){a=document.createElement("div");a.id="avatar";$("playerName").insertAdjacentElement("beforebegin",a)}
  a.innerHTML=PHOTOS[p.n]?`<img src="${PHOTOS[p.n]}" alt="${p.n}" onerror="this.outerHTML=avatarSvg(currentPlayer)">`:avatarSvg(p);
 }
-function rate(t,k){const W=k==="bat"?{Batsman:3,Wicketkeeper:2.5,"All-rounder":2,Bowler:.5}:{Bowler:3,"All-rounder":2,Batsman:0,Wicketkeeper:0};return t.reduce((s,x)=>s+W[x.role]*(1+x.price*.05),0)}
-function bbReport(){
- let b=$("bbBox");if(!b){b=document.createElement("div");b.id="bbBox";$("winnerText").insertAdjacentElement("afterend",b)}
- const row=(k,icon,label)=>{const r=[rate(team[0],k),rate(team[1],k)],mx=Math.max(...r,1),w=r[0]===r[1]?"🤝 Both teams are equal":"✅ "+names[r[0]>r[1]?0:1]+" is best";
-  return `<div class="bb"><b>${icon} ${label}: ${w}</b>${[0,1].map(i=>`<div class="small" style="margin-top:6px">${names[i]} • ${r[i].toFixed(1)}</div><div class="bbbar"><i style="width:${r[i]/mx*100}%"></i></div>`).join("")}</div>`};
- const top=team.map(t=>t.slice().sort((a,c)=>c.price-a.price)[0]);
- b.innerHTML=row("bat","🏏","Batting")+row("bowl","🎯","Bowling")+`<div class="bb"><b>💎 Costliest buy</b><div class="small">${names[0]}: ${top[0].name} (₹${top[0].price})<br>${names[1]}: ${top[1].name} (₹${top[1].price})</div></div>`;
-}
-function setFormat(format){matchFormat=format;document.querySelectorAll(".formatBtn").forEach(btn=>btn.classList.toggle("secondary",btn.dataset.format!==format));if(full(0)&&full(1))compareTeams();$("notice").textContent="Format set to "+format+" 🏏";}
-function roleValue(role,format){const base={Batsman:10,Bowler:10,"All-rounder":11,Wicketkeeper:10}[role]||10;if(format==="T20")return role==="All-rounder"?12:base;if(format==="ODI")return role==="Bowler"||role==="All-rounder"?12:base;if(format==="IPL")return role==="Batsman"||role==="Wicketkeeper"?12:(role==="All-rounder"?11:base);return base;}
-function compareTeams(){const score=team.map(t=>{const roles={Batsman:0,Bowler:0,"All-rounder":0,Wicketkeeper:0};t.forEach(p=>roles[p.role]++);let s=t.reduce((sum,p)=>sum+roleValue(p.role,matchFormat),0);s+=Math.min(roles.Batsman,2)*2+Math.min(roles.Bowler,2)*2+Math.min(roles.Wicketkeeper,1)+Math.min(roles["All-rounder"],2)*2;return s;});$("comparison").style.display="block";$("score1").textContent=score[0];$("score2").textContent=score[1];$("scoreName1").textContent=names[0];$("scoreName2").textContent=names[1];$("formatName").textContent=matchFormat;$("winnerText").textContent=score[0]===score[1]?"🤝 It's a TIE!":score[0]>score[1]?"🏆 "+names[0]+" has the stronger team!":"🏆 "+names[1]+" has the stronger team!";bbReport();}
-document.querySelectorAll(".formatBtn").forEach(btn=>btn.addEventListener("click",()=>setFormat(btn.dataset.format)));
-function makeFilters(){
-  $("filters").innerHTML="";
-  ["All","Batsman","Bowler","All-rounder","Wicketkeeper"].forEach(c=>{
-    let b=document.createElement("button");b.textContent=c;b.className=c===selectedCat?"":"secondary";
-    b.onclick=()=>{selectedCat=c;makeFilters();startPlayer()};$("filters").appendChild(b);
-  });
-}
-function saveNames(){
-  names=[$("name1").value.trim()||"Player 1",$("name2").value.trim()||"Player 2"];
-  PL[0].name=names[0];PL[1].name=names[1];savePL();setLabels();
-  $("turn").textContent=names[turn]+"'s turn";
-  $("notice").textContent="Names saved! "+names[0]+" vs "+names[1]+" 🔥";
-}
-let PL=[{name:"",photo:""},{name:"",photo:""}];
-try{const s=JSON.parse(localStorage.getItem("cab_players")||"null");if(Array.isArray(s)&&s.length===2)PL=s.map(p=>({name:(p&&p.name)||"",photo:""}))}catch(e){}
-function savePL(){try{localStorage.setItem("cab_players",JSON.stringify(PL))}catch(e){}}
-const AVC=[["#00d4ff","#0a5cff"],["#ff9d2e","#ff3d6e"]];
-function defAv(i){const [a,b]=AVC[i];return "data:image/svg+xml,"+encodeURIComponent(`<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 120 120'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='${a}'/><stop offset='1' stop-color='${b}'/></linearGradient></defs><rect width='120' height='120' fill='#0b1a33'/><circle cx='60' cy='60' r='58' fill='url(#g)' opacity='.25'/><path d='M14 124c3-28 22-40 46-40s43 12 46 40z' fill='url(#g)'/><rect x='52' y='72' width='16' height='16' fill='#c98f65'/><ellipse cx='60' cy='54' rx='19' ry='22' fill='#d9a074'/><path d='M40 50c0-24 40-24 40 0z' fill='url(#g)'/><path d='M38 50h58c0 6-8 8-58 8z' fill='url(#g)'/><circle cx='52' cy='60' r='2.4' fill='#111'/><circle cx='68' cy='60' r='2.4' fill='#111'/><path d='M52 70q8 6 16 0' stroke='#111' stroke-width='2' fill='none'/><path d='M42 64c0 16 8 22 18 22s18-6 18-22c-4 9-10 11-18 11s-14-2-18-11z' fill='#2a1a10' opacity='.5'/></svg>`)}
-function setLabels(){[0,1].forEach(i=>{const e=$("label"+(i+1));e.textContent="";const m=new Image();m.className="mini";m.src=PL[i].photo||defAv(i);e.append(m," "+names[i])})}
-function drawPlayers(){[0,1].forEach(i=>$("pimg"+i).src=PL[i].photo||defAv(i))}
-function openPlayers(){[0,1].forEach(i=>$("pname"+i).value=PL[i].name||"");drawPlayers();$("players").style.display="block"}
-function loadPhoto(i,f){if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const s=Math.min(1,800/Math.max(im.width,im.height)),c=document.createElement("canvas");c.width=Math.round(im.width*s);c.height=Math.round(im.height*s);const x=c.getContext("2d");x.fillStyle="#0b1a33";x.fillRect(0,0,c.width,c.height);x.drawImage(im,0,0,c.width,c.height);PL[i].photo=c.toDataURL("image/jpeg",.92);savePL();drawPlayers()};im.onerror=()=>alert("Could not open that image");im.src=r.result};r.readAsDataURL(f)}
-[0,1].forEach(i=>{$("pname"+i).addEventListener("input",e=>{e.target.classList.remove("err");PL[i].name=e.target.value})});
+
 let fx,fctx,parts=[],raf=0,tms=[];
 function ember(){return{x:Math.random()*fx.width,y:fx.height+Math.random()*60,vx:(Math.random()-.5)*.6,vy:-(.6+Math.random()*1.6),r:1+Math.random()*2.5,l:1,c:Math.random()<.5?"0,212,255":"255,157,46",b:0}}
 function burst(){for(let i=0;i<70;i++){const a=Math.random()*6.283,s=2+Math.random()*7;parts.push({x:fx.width/2,y:fx.height/2,vx:Math.cos(a)*s,vy:Math.sin(a)*s,r:2+Math.random()*3,l:1,c:"255,255,255",b:1})}}
 function loop(){fctx.clearRect(0,0,fx.width,fx.height);parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;if(p.b){p.l-=.02;p.vx*=.96;p.vy*=.96}else if(p.y<-10)Object.assign(p,ember());fctx.fillStyle=`rgba(${p.c},${p.b?Math.max(p.l,0):.7})`;fctx.beginPath();fctx.arc(p.x,p.y,p.r,0,6.283);fctx.fill()});parts=parts.filter(p=>!p.b||p.l>0);raf=requestAnimationFrame(loop)}
 function tm(f,ms){tms.push(setTimeout(f,ms))}
-function startIntro(){
- [0,1].forEach(i=>{const v=$("pname"+i).value.trim();if(!v){$("pname"+i).classList.add("err");$("pname"+i).focus();return}PL[i].name=v});
- if(!PL[0].name.trim()||!PL[1].name.trim()||!$("pname0").value.trim()||!$("pname1").value.trim())return;
- savePL();$("name1").value=PL[0].name;$("name2").value=PL[1].name;saveNames();
- $("players").style.display="none";
- [0,1].forEach(i=>{$("iimg"+i).src=PL[i].photo||defAv(i);$("iname"+i).textContent=PL[i].name});
- ["f1","f2"].forEach(id=>$(id).classList.remove("in"));$("vs").classList.remove("hit");$("banner").classList.remove("show");
- if(!$("eq").children.length)for(let i=0;i<28;i++){const e=document.createElement("i");e.style.animationDelay=(Math.random()*.6)+"s";e.style.animationDuration=(.35+Math.random()*.5)+"s";$("eq").appendChild(e)}
- const it=$("intro");it.classList.remove("out","shake");it.style.display="block";
- fx=$("introFx");fx.width=innerWidth;fx.height=innerHeight;fctx=fx.getContext("2d");parts=[];for(let i=0;i<45;i++){const p=ember();p.y=Math.random()*fx.height;parts.push(p)}cancelAnimationFrame(raf);loop();
- tm(()=>$("f1").classList.add("in"),300);
- tm(()=>{$("vs").classList.add("hit");$("flash").classList.remove("go");void $("flash").offsetWidth;$("flash").classList.add("go");it.classList.add("shake");burst()},1700);
- tm(()=>$("f2").classList.add("in"),2300);
- tm(()=>{$("banner").textContent=PL[0].name+" ⚔️ VS ⚔️ "+PL[1].name;$("banner").classList.add("show")},3500);
- tm(endIntro,7000);
-}
+
 function endIntro(){
  const it=$("intro");if(it.style.display!=="block"||it.classList.contains("out"))return;
  tms.forEach(clearTimeout);tms=[];it.classList.add("out");openSetup();
  setTimeout(()=>{it.style.display="none";cancelAnimationFrame(raf)},750);
 }
+
 const esc=s=>String(s).replace(/[&<>"']/g,c=>'&#'+c.charCodeAt(0)+';');
 const sl=ms=>new Promise(r=>setTimeout(r,ms));
 let HIST=[],finRun=0,cfi=0,LAST=null;
@@ -493,26 +443,28 @@ function fxAdd(x,y,n,cols,o){o=o||{};if(FXC.width!==innerWidth||FXC.height!==inn
 function fxLoop(){fxx.clearRect(0,0,FXC.width,FXC.height);fp.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=p.g;p.vx*=.99;p.l-=p.d;fxx.globalAlpha=Math.max(p.l,0);fxx.fillStyle=p.c;if(p.sq)fxx.fillRect(p.x,p.y,p.r*1.6,p.r);else{fxx.beginPath();fxx.arc(p.x,p.y,p.r,0,6.283);fxx.fill()}});fxx.globalAlpha=1;fp=fp.filter(p=>p.l>0&&p.y<innerHeight+30);fr=fp.length?requestAnimationFrame(fxLoop):0;if(!fr)fxx.clearRect(0,0,FXC.width,FXC.height)}
 function confetti(ms){clearInterval(cfi);const end=Date.now()+ms;cfi=setInterval(()=>{if(Date.now()>end)return clearInterval(cfi);fxAdd(Math.random()*innerWidth,-10,5,['#f5c542','#fff2b0','#fff','#00d4ff','#ff9d2e'],{s:2,g:.07,d:.005,sq:1,dn:1})},120)}
 function animNum(el,a,b,ms,fmt){const t0=performance.now();(function f(t){const k=Math.min(1,(t-t0)/ms),e=1-Math.pow(1-k,3);el.textContent=fmt(a+(b-a)*e);if(k<1)requestAnimationFrame(f)})(t0)}
+
 async function soldFx(w,e,old,cb){
- const o=$('soldFx'),y0=scrollY;o.className='p'+w;o.style.display='flex';o.style.background='';o.style.backdropFilter='';
+ const o=$('soldFx'),y0=scrollY;o.className='';o.style.setProperty('--ac',PC[w]);o.style.display='flex';o.style.background='';o.style.backdropFilter='';
  o.innerHTML=`<div class='scard' id='scard'><div class='sn'>🏏 ${esc(e.name)}</div><div class='sr'>⭐ ${esc(e.role).toUpperCase()}</div><div class='sw'>👤 SOLD TO<b>${esc(names[w])}</b></div><div class='sp'>💰 SOLD PRICE: ₹${e.price}</div></div><div id='stamp'>🔨 SOLD!</div>`;
  await sl(450);$('stamp').classList.add('hit');
- const r=$('stamp').getBoundingClientRect();fxAdd(r.left+r.width/2,r.top+r.height/2,40,w?['#ff9d2e','#ffd34d','#fff']:['#00d4ff','#9fe8ff','#fff'],{s:6,g:.05,d:.025});
+ const r=$('stamp').getBoundingClientRect();fxAdd(r.left+r.width/2,r.top+r.height/2,40,[PC[w],'#ffd34d','#fff'],{s:6,g:.05,d:.025});
  await sl(1500);
- const tEl=$('team'+(w+1));tEl.scrollIntoView({block:'center'});
+ const tEl=$('team'+w);tEl.scrollIntoView({block:'center'});
  const c=$('scard').getBoundingClientRect(),t=tEl.getBoundingClientRect();
  const dx=t.left+t.width/2-(c.left+c.width/2),dy=Math.max(t.top,0)+Math.min(t.height,120)/2-(c.top+c.height/2);
  $('stamp').style.transition='opacity .3s';$('stamp').style.opacity=0;o.style.background='rgba(2,5,12,0)';o.style.backdropFilter='none';
  try{await $('scard').animate([{transform:'none',opacity:1},{transform:`translate(${dx}px,${dy}px) scale(.22)`,opacity:.25}],{duration:750,easing:'cubic-bezier(.6,0,.3,1)',fill:'forwards'}).finished}catch(x){}
  o.style.display='none';
- const p=tEl.parentElement;p.classList.add('glowp'+w);update();
- animNum($('money'+(w+1)),old,money[w],700,v=>'₹'+Math.round(v));animNum($('count'+(w+1)),team[w].length-1,team[w].length,500,v=>Math.round(v));
+ const p=tEl.parentElement;p.classList.add('gl');update();
+ animNum($('money'+w),old,money[w],700,v=>'₹'+Math.round(v));animNum($('count'+w),team[w].length-1,team[w].length,500,v=>Math.round(v));
  if(tEl.lastElementChild)tEl.lastElementChild.classList.add('newrow');
- await sl(1000);p.classList.remove('glowp'+w);scrollTo({top:y0,behavior:'smooth'});cb();
+ await sl(1000);p.classList.remove('gl');scrollTo({top:y0,behavior:'smooth'});cb();
 }
 async function passFx(p,cb){const o=$('soldFx');o.className='pass';o.style.display='flex';o.style.background='';o.style.backdropFilter='';
  o.innerHTML=`<div class='scard'><div class='sn'>⏭️ ${esc(p.n)}</div><div id='stamp' class='hit'>PLAYER PASSED</div></div>`;
  HIST.push({n:p.n,role:p.r,pass:1});await sl(1250);o.style.display='none';cb()}
+
 const R1=new Set(['Virat Kohli','MS Dhoni','Rohit Sharma','AB de Villiers','Jasprit Bumrah','Rashid Khan','Chris Gayle','Ravindra Jadeja','Hardik Pandya','Andre Russell','Sunil Narine','Sachin Tendulkar','Kane Williamson']);
 const R2=new Set(['David Warner','Suresh Raina','Jos Buttler','KL Rahul','Shikhar Dhawan','Rishabh Pant','Trent Boult','Kagiso Rabada','Mitchell Starc','Lasith Malinga','Dale Steyn','Yuzvendra Chahal','Ravichandran Ashwin','Bhuvneshwar Kumar','Kieron Pollard','Shane Watson','Dwayne Bravo','Faf du Plessis','Suryakumar Yadav','Pat Cummins','Travis Head','Shubman Gill','Glenn Maxwell','Shreyas Iyer','Sanju Samson','Heinrich Klaasen','Babar Azam','Ben Stokes','Quinton de Kock','Joe Root','Imran Tahir','Steve Smith','Shaheen Afridi','Mohammad Rizwan','Adam Gilchrist','Shane Warne','Muttiah Muralitharan','Brian Lara','Kapil Dev']);
 const qOf=n=>R1.has(n)?96:R2.has(n)?90:82;
@@ -529,40 +481,156 @@ function strength(t,fmt){
  const ideal={Batsman:.35,Bowler:.35,'All-rounder':.2,Wicketkeeper:.1};let dev=0;for(const r in ideal)dev+=Math.abs(by[r].length/n-ideal[r]);
  const bal=Math.max(30,100-dev*60),dep=avg(t.map(x=>qOf(x.name))),c={bat,bowl,ar,wk,bal,dep},w=WT[fmt]||WT.ALL;
  return{c,overall:+[bat,bowl,ar,wk,bal,dep].reduce((s,v,i)=>s+v*w[i],0).toFixed(1)}}
+
+const TROPHY="<svg class='trophy' viewBox='0 0 100 100' width='120'><defs><linearGradient id='gd' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#fff2b0'/><stop offset='.5' stop-color='#f5c542'/><stop offset='1' stop-color='#b8860b'/></linearGradient></defs><path d='M28 12h44v24c0 16-10 26-22 26S28 52 28 36z' fill='url(#gd)'/><path d='M28 18H14c0 16 6 24 16 26M72 18h14c0 16-6 24-16 26' fill='none' stroke='url(#gd)' stroke-width='6'/><rect x='44' y='60' width='12' height='14' fill='url(#gd)'/><rect x='30' y='74' width='40' height='10' rx='3' fill='url(#gd)'/><path d='M36 16v22' stroke='#fff8' stroke-width='4' stroke-linecap='round'/></svg>";
+
+async function shareRes(btn){if(!LAST)return;try{if(navigator.share){await navigator.share({title:'Cricket Auction Battle',text:LAST})}else{await navigator.clipboard.writeText(LAST);btn.textContent='✅ Copied!'}}catch(e){}}
+
+
+function drawPlayers(){
+ $('pcount').innerHTML='';[2,3,4,5].forEach(v=>{const b=document.createElement('button');b.className='chip'+(P===v?' on':'');b.textContent=v+' Players';b.onclick=()=>{P=v;drawPlayers()};$('pcount').appendChild(b)});
+ const box=$('pcards');box.innerHTML='';
+ for(let i=0;i<P;i++){const d=document.createElement('div');d.className='pcard enter';d.style.setProperty('--pc',PC[i]);d.style.setProperty('--i',i);
+  d.innerHTML=`<div class='plabel'>PLAYER ${i+1}</div><div class='ring'><span class='badge' id='bd${i}'>${esc((names[i]||'?').trim().charAt(0).toUpperCase()||'?')}</span></div><input class='pname' id='pname${i}' maxlength='14' placeholder='Enter Player ${i+1} name' value='${esc(names[i]||'')}'>`;
+  const im=new Image();im.alt='';im.src=defAv(i);d.querySelector('.ring').prepend(im);box.appendChild(d);
+  d.querySelector('input').addEventListener('input',e=>{names[i]=e.target.value;e.target.classList.remove('err');const bd=$('bd'+i);bd.textContent=(e.target.value.trim().charAt(0)||'?').toUpperCase();bd.classList.remove('pop');void bd.offsetWidth;bd.classList.add('pop')})}
+}
+function openPlayers(){drawPlayers();$('players').style.display='block'}
+function buildStage(){const st=$('stage');st.className=P>2?'many':'';st.innerHTML='';const dirs=['dL','dR','dT','dB','dZ'];
+ for(let i=0;i<P;i++){const f=document.createElement('div');f.className='fighter '+dirs[i];f.id='fg'+i;f.style.setProperty('--pc',PC[i]);const r=document.createElement('div');r.className='ring';const im=new Image();im.alt='';im.src=defAv(i);r.appendChild(im);const nm=document.createElement('div');nm.className='fname';nm.textContent=names[i];f.append(r,nm);st.appendChild(f);
+  if(i<P-1){const v=document.createElement('div');v.className='vsb';v.id='vs'+i;v.textContent='VS';st.appendChild(v)}}}
+function startIntro(){
+ const vals=[];let bad=false;
+ for(let i=0;i<P;i++){const el=$('pname'+i),v=el.value.trim();if(!v){el.classList.add('err');if(!bad)el.focus();bad=true}vals.push(v)}
+ if(bad)return;
+ names=vals;saveSaved();$('players').style.display='none';buildStage();
+ if(!$('eq').children.length)for(let i=0;i<28;i++){const e=document.createElement('i');e.style.animationDelay=(Math.random()*.6)+'s';e.style.animationDuration=(.35+Math.random()*.5)+'s';$('eq').appendChild(e)}
+ $('banner').classList.remove('show');
+ const it=$('intro');it.classList.remove('out','shake');it.style.display='block';
+ fx=$('introFx');fx.width=innerWidth;fx.height=innerHeight;fctx=fx.getContext('2d');parts=[];for(let i=0;i<45;i++){const p=ember();p.y=Math.random()*fx.height;parts.push(p)}cancelAnimationFrame(raf);loop();
+ tm(()=>$('fg0').classList.add('in'),300);
+ const many=P>2,tv=i=>many?1500+i*800:1700,tf=i=>tv(i-1)+(many?450:600);
+ for(let i=0;i<P-1;i++){tm(()=>{$('vs'+i).classList.add('hit');$('flash').classList.remove('go');void $('flash').offsetWidth;$('flash').classList.add('go');it.classList.add('shake');burst();setTimeout(()=>it.classList.remove('shake'),520)},tv(i));tm(()=>$('fg'+(i+1)).classList.add('in'),tf(i+1))}
+ const tb=tf(P-1)+(many?1000:1200);
+ tm(()=>{$('banner').textContent=names.join(' \u2694\ufe0f VS \u2694\ufe0f ');$('banner').classList.add('show')},tb);
+ tm(endIntro,tb+3500);
+}
+function setLabels(){for(let i=0;i<P;i++){const e=$('label'+i);if(!e)continue;e.textContent='';const m=new Image();m.className='mini';m.src=defAv(i);e.append(m,' '+names[i])}}
+const full=i=>team[i].length>=N,maxBid=i=>Math.max(1,money[i]-(N-team[i].length-1)),nextMin=()=>leader<0?1:price+1;
+const canBid=i=>!full(i)&&!passed.has(i)&&i!==leader&&maxBid(i)>=nextMin();
+function nextTurn(from){for(let k=1;k<=P;k++){const i=(from+k)%P;if(canBid(i))return i}return -1}
+function filtered(){return selectedCat==='All'?pool:pool.filter(p=>p.r===selectedCat)}
+function startGame(){
+ N=cfg.n;B=cfg.budget;matchFormat=cfg.fmt;pool=[...base()];team=Array.from({length:P},()=>[]);money=Array(P).fill(B);soldTotal=0;selectedCat='All';HIST=[];lot=0;busy=false;hideFin();
+ $('subline').textContent=`${P} Players \u2022 \u20b9${B} each \u2022 Buy exactly ${N} players each`;
+ $('setup').style.display='none';$('comparison').style.display='none';
+ document.querySelectorAll('.formatBtn').forEach(btn=>btn.classList.toggle('secondary',btn.dataset.format!==matchFormat));
+ $('teams').innerHTML=Array.from({length:P},(_,i)=>`<div class='card tp' style='--pc:${PC[i]}'><h3 id='label${i}'></h3><div class='money' id='money${i}'></div><div class='small'>Players: <span id='count${i}'>0</span>/${N}</div><div class='teamlist' id='team${i}'></div></div>`).join('');
+ $('pads').innerHTML=Array.from({length:P},(_,i)=>`<div class='pad' id='pad${i}' style='--pc:${PC[i]}'><div class='pn' id='pn${i}'></div><div class='pm' id='pm${i}'></div><div class='pb' id='pb${i}'></div></div>`).join('');
+ makeFilters();startPlayer();
+}
+function renderPads(){const b0=leader<0?0:price;
+ for(let i=0;i<P;i++){const pad=$('pad'+i);if(!pad)return;
+  pad.className='pad'+(turn===i?' act':'')+(leader===i?' lead':'')+(full(i)?' fullp':'')+(passed.has(i)?' out':'');
+  $('pn'+i).textContent=names[i]+(leader===i?' \ud83d\udc51':'');
+  $('pm'+i).textContent=full(i)?'SQUAD FULL \u2705':passed.has(i)?'PASSED':`\u20b9${money[i]} \u2022 ${team[i].length}/${N}`;
+  const mb=maxBid(i);
+  $('pb'+i).innerHTML=[1,2,5].map(a=>{const v=b0+a;return `<button ${turn===i&&v<=mb&&!busy?'':'disabled'} onclick='bidBy(${i},${v})'>BID \u20b9${v}</button>`}).join('')+`<button class='secondary' ${turn===i&&!busy?'':'disabled'} onclick='passBy(${i})'>PASS</button>`}}
+function update(){
+ for(let i=0;i<P;i++){$('money'+i).textContent='\u20b9'+money[i];$('count'+i).textContent=team[i].length;$('team'+i).innerHTML=team[i].map(x=>`<div><span>${esc(x.name)}<br><span class='small'>${esc(x.role)}</span></span><b>\u20b9${x.price}</b></div>`).join('')}
+ setLabels();
+ $('soldCount').textContent=soldTotal;$('remaining').textContent=P*N-soldTotal;$('pool').textContent='\u20b9'+money.reduce((a,b)=>a+b,0);
+ $('round').textContent=`Player ${Math.min(soldTotal+1,P*N)} of ${P*N}`;$('bar').style.width=(soldTotal/(P*N)*100)+'%';renderPads();
+}
+function showTurn(){const t=$('turn');t.textContent=turn>=0?names[turn]+"'s turn":'';t.style.color=turn>=0?PC[turn]:'';
+ const c=$('currentBid');c.textContent=leader<0?'BASE \u20b91':'\u20b9'+price;c.classList.remove('bump');void c.offsetWidth;c.classList.add('bump');
+ $('leaderLine').textContent=leader<0?'No bids yet':'\ud83d\udc51 Leading: '+names[leader];renderPads()}
+function startPlayer(skipping){
+ busy=false;let f=filtered();if(!f.length){selectedCat='All';f=pool;makeFilters()}
+ if(skipping===true&&f.length>1)f=f.filter(p=>p!==currentPlayer);
+ currentPlayer=f[Math.floor(Math.random()*f.length)];price=1;leader=-1;passed=new Set();
+ showAvatar(currentPlayer);$('playerName').textContent=currentPlayer.n;$('playerRole').textContent=currentPlayer.r;
+ $('playerTags').innerHTML=currentPlayer.t.map(t=>`<span class="tag t${t}">${TN[t]}</span>`).join('')+`<span class="tag tF">${currentPlayer.f.split('').map(c=>({I:'IPL',O:'ODI',T:'T20'})[c]).join(' \u2022 ')}</span>`;
+ const s=lot++%P;turn=nextTurn((s-1+P)%P);
+ update();if(turn<0){resolveLot();return}
+ if(skipping!==true)$('notice').textContent=`${names[turn]} bids first \u2014 use your own BID buttons.`;
+ showTurn();
+}
+function advance(){const t=nextTurn(turn);if(t<0){resolveLot();return}turn=t;showTurn()}
+function bidBy(i,v){if(busy||turn!==i||v<nextMin()||v>maxBid(i))return;price=v;leader=i;advance();if(turn>=0)$('notice').textContent=`${names[i]} bid \u20b9${v}. ${names[turn]}'s turn.`}
+function passBy(i){if(busy||turn!==i)return;passed.add(i);advance();if(turn>=0)$('notice').textContent=`${names[i]} passed. ${names[turn]}'s turn.`}
+function sold(){if(busy||turn<0)return;if(leader<0){$('notice').textContent='No bids yet \u2014 place a bid first.';return}resolveLot()}
+function resolveLot(){turn=-1;
+ if(leader>=0){$('notice').textContent=`\ud83d\udd28 ${names[leader]} wins ${currentPlayer.n} at \u20b9${price}!`;sellTo(leader)}
+ else{busy=true;renderPads();$('notice').textContent='No bids for '+currentPlayer.n+' \u2014 unsold.';passFx(currentPlayer,()=>startPlayer(true))}}
+function skipPlayer(){if(busy||!currentPlayer)return;busy=true;turn=-1;renderPads();$('notice').textContent='\u23ed\ufe0f '+currentPlayer.n+' skipped!';passFx(currentPlayer,()=>startPlayer(true))}
+function sellTo(w){busy=true;const e={name:currentPlayer.n,role:currentPlayer.r,price},old=money[w];
+ money[w]-=price;team[w].push({name:e.name,role:e.role,price});pool=pool.filter(p=>p!==currentPlayer);soldTotal++;HIST.push({n:e.name,role:e.role,to:w,price});
+ soldFx(w,e,old,()=>{if(team.every((t,i)=>full(i)))finish();else startPlayer()})}
+function finish(){busy=true;turn=-1;$('playerName').textContent='AUCTION COMPLETE \ud83c\udf89';$('playerRole').textContent='Final Teams';$('playerTags').innerHTML='';if($('avatar'))$('avatar').innerHTML='';
+ $('currentBid').textContent='\ud83c\udfc6';$('turn').textContent='';$('leaderLine').textContent='';renderPads();compareTeams();$('notice').textContent=`All ${P} teams completed their ${N}-player squads!`;setTimeout(finale,800)}
+function compareTeams(){const S=team.map(t=>strength(t,matchFormat).overall),o=[...S.keys()].sort((a,b)=>S[b]-S[a]);
+ $('comparison').style.display='block';$('formatName').textContent=matchFormat;
+ $('winnerText').innerHTML=o.map((i,r)=>`${['\ud83e\udd47','\ud83e\udd48','\ud83e\udd49','4\ufe0f\u20e3','5\ufe0f\u20e3'][r]} ${esc(names[i])} \u2014 ${S[i].toFixed(1)}`).join('<br>')}
+function setFormat(format){matchFormat=format;document.querySelectorAll('.formatBtn').forEach(btn=>btn.classList.toggle('secondary',btn.dataset.format!==format));if(team.length&&team.every((t,i)=>full(i)))compareTeams();$('notice').textContent='Format set to '+format+' \ud83c\udfcf'}
+
+function makeFilters(){
+  $("filters").innerHTML="";
+  ["All","Batsman","Bowler","All-rounder","Wicketkeeper"].forEach(c=>{
+    let b=document.createElement("button");b.textContent=c;b.className=c===selectedCat?"":"secondary";
+    b.onclick=()=>{selectedCat=c;makeFilters();startPlayer()};$("filters").appendChild(b);
+  });
+}
+
+document.querySelectorAll(".formatBtn").forEach(btn=>btn.addEventListener("click",()=>setFormat(btn.dataset.format)));
+
+
 function hideFin(){finRun++;clearInterval(cfi);fp=[];$('fin').style.display='none';$('fin').className='';$('hist').style.display='none'}
 function playAgain(){hideFin();openSetup()}
-function showHist(){let k=0;$('hlist').innerHTML=HIST.map(h=>h.pass?`<div class='hr' style='opacity:.6'>⏭️ ${esc(h.n)} — passed</div>`:`<div class='hr'>#${++k} 🏏 <b>${esc(h.n)}</b> (${esc(h.role)}) → <b style='color:${h.to?'#ff9d2e':'#00d4ff'}'>${esc(names[h.to])}</b> ₹${h.price}</div>`).join('')||'No sales yet';$('hist').style.display='block'}
-async function shareRes(btn){if(!LAST)return;try{if(navigator.share){await navigator.share({title:'Cricket Auction Battle',text:LAST})}else{await navigator.clipboard.writeText(LAST);btn.textContent='✅ Copied!'}}catch(e){}}
-const TROPHY="<svg class='trophy' viewBox='0 0 100 100' width='120'><defs><linearGradient id='gd' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#fff2b0'/><stop offset='.5' stop-color='#f5c542'/><stop offset='1' stop-color='#b8860b'/></linearGradient></defs><path d='M28 12h44v24c0 16-10 26-22 26S28 52 28 36z' fill='url(#gd)'/><path d='M28 18H14c0 16 6 24 16 26M72 18h14c0 16-6 24-16 26' fill='none' stroke='url(#gd)' stroke-width='6'/><rect x='44' y='60' width='12' height='14' fill='url(#gd)'/><rect x='30' y='74' width='40' height='10' rx='3' fill='url(#gd)'/><path d='M36 16v22' stroke='#fff8' stroke-width='4' stroke-linecap='round'/></svg>";
+function showHist(){let k=0;$('hlist').innerHTML=HIST.map(h=>h.pass?`<div class='hr' style='opacity:.6'>\u23ed\ufe0f ${esc(h.n)} \u2014 passed</div>`:`<div class='hr'>#${++k} \ud83c\udfcf <b>${esc(h.n)}</b> (${esc(h.role)}) \u2192 <b style='color:${PC[h.to]}'>${esc(names[h.to])}</b> \u20b9${h.price}</div>`).join('')||'No sales yet';$('hist').style.display='block'}
 async function finale(){
- const id=++finRun,alive=()=>id===finRun,S=[0,1].map(i=>strength(team[i],matchFormat)),sc=S.map(s=>s.overall);
+ const id=++finRun,alive=()=>id===finRun,S=team.map(t=>strength(t,matchFormat)),sc=S.map(s=>s.overall),idx=[...Array(P).keys()];
  const f=$('fin'),b=$('finBox'),spent=i=>team[i].reduce((s,x)=>s+x.price,0);
  const scr=h=>{b.innerHTML=h;b.classList.remove('fin2');void b.offsetWidth;b.classList.add('fin2')};
  f.className='';f.style.display='block';f.scrollTop=0;
- scr(`<div class='ftitle'>🏏 AUCTION COMPLETE</div><div class='ftwo'>${[0,1].map(i=>`<div class='fgl ft${i}'><div class='ftn'>${esc(names[i])}</div><div>Players: <b>${team[i].length}</b></div><div>Spent: <b>₹${spent(i)}</b></div><div>Remaining: <b>₹${money[i]}</b></div></div>`).join('')}</div>`);
+ scr(`<div class='ftitle'>\ud83c\udfcf AUCTION COMPLETE</div><div class='fgrid'>${idx.map(i=>`<div class='fgl' style='border-top:3px solid ${PC[i]}'><div class='ftn'>${esc(names[i])}</div><div>Players: <b>${team[i].length}</b></div><div>Spent: <b>\u20b9${spent(i)}</b></div><div>Remaining: <b>\u20b9${money[i]}</b></div></div>`).join('')}</div>`);
  await sl(2800);if(!alive())return;
  for(let k=3;k>0;k--){scr(`<div class='fcd'>${k}</div>`);await sl(850);if(!alive())return}
- scr(`<div class='ftitle'>TEAM VS TEAM</div><div class='ftwo fvs'><div class='fgl ft0'><div class='ftn'>${esc(names[0])}</div><div class='fbig' id='s0'>0.0</div><div>/ 100</div></div><div class='fx'>VS</div><div class='fgl ft1'><div class='ftn'>${esc(names[1])}</div><div class='fbig' id='s1'>0.0</div><div>/ 100</div></div></div><div id='calc'>Calculating team strength… (${esc(matchFormat)})</div><div class='fgl' id='tbl'></div>`);
+ const sep=P===2?"<div class='fx'>VS</div>":'',gt=P===2?'1fr auto 1fr':`repeat(${P},1fr)`;
+ scr(`<div class='ftitle'>TEAM SHOWDOWN</div><div class='fsc' style='grid-template-columns:${gt}'>${idx.map(i=>`<div class='fgl' style='border-top:3px solid ${PC[i]}'><div class='ftn'>${esc(names[i])}</div><div class='fbig' id='s${i}'>0.0</div><div class='small'>/ 100</div></div>`).join(sep)}</div><div id='calc'>Calculating team strength\u2026 (${esc(matchFormat)})</div><div class='fgl' id='tbl'></div>`);
  const t1=sc.map(v=>Math.max(0,v-6));
- animNum($('s0'),0,t1[0],1400,v=>v.toFixed(1));animNum($('s1'),0,t1[1],1400,v=>v.toFixed(1));await sl(1600);if(!alive())return;
- animNum($('s0'),t1[0],sc[0],1700,v=>v.toFixed(1));animNum($('s1'),t1[1],sc[1],1700,v=>v.toFixed(1));await sl(1900);if(!alive())return;
+ idx.forEach(i=>animNum($('s'+i),0,t1[i],1400,v=>v.toFixed(1)));await sl(1600);if(!alive())return;
+ idx.forEach(i=>animNum($('s'+i),t1[i],sc[i],1700,v=>v.toFixed(1)));await sl(1900);if(!alive())return;
  $('calc').textContent='Category comparison';
- const tb=$('tbl');tb.innerHTML=`<div class='trow'><span></span><b>${esc(names[0])}</b><b>${esc(names[1])}</b></div>`;
- for(const [l,k] of [['Batting','bat'],['Bowling','bowl'],['All-Rounders','ar'],['Wicketkeeping','wk'],['Squad Balance','bal'],['Squad Depth','dep']]){const a=Math.round(S[0].c[k]),c=Math.round(S[1].c[k]);tb.insertAdjacentHTML('beforeend',`<div class='trow'><span>${l}</span><b class='${a>c?'w':''}'>${a}</b><b class='${c>a?'w':''}'>${c}</b></div>`);await sl(480);if(!alive())return}
- tb.insertAdjacentHTML('beforeend',`<div class='trow tot'><span>OVERALL</span><b class='${sc[0]>sc[1]?'w':''}'>${sc[0].toFixed(1)}</b><b class='${sc[1]>sc[0]?'w':''}'>${sc[1].toFixed(1)}</b></div>`);
+ const tb=$('tbl'),cols=`style='grid-template-columns:1.3fr repeat(${P},1fr)'`;
+ tb.innerHTML=`<div class='trow' ${cols}><span></span>${idx.map(i=>`<b style='color:${PC[i]};font-size:12px'>${esc(names[i])}</b>`).join('')}</div>`;
+ for(const [l,k] of [['Batting','bat'],['Bowling','bowl'],['All-Rounders','ar'],['Wicketkeeping','wk'],['Squad Balance','bal'],['Squad Depth','dep']]){const v=S.map(s=>Math.round(s.c[k])),m=Math.max(...v);tb.insertAdjacentHTML('beforeend',`<div class='trow' ${cols}><span>${l}</span>${v.map(x=>`<b class='${x===m?'w':''}'>${x}</b>`).join('')}</div>`);await sl(480);if(!alive())return}
+ const mx=Math.max(...sc);tb.insertAdjacentHTML('beforeend',`<div class='trow tot' ${cols}><span>OVERALL</span>${sc.map(x=>`<b class='${x===mx?'w':''}'>${x.toFixed(1)}</b>`).join('')}</div>`);
  await sl(2200);if(!alive())return;
- const win=sc[0]===sc[1]?-1:sc[0]>sc[1]?0:1,dd=Math.round(Math.abs(sc[0]-sc[1])),lab=win<0?'🤝 IT\'S A TIE!':dd<=2?'🔥 WHAT A BATTLE!':dd<=5?'⚔️ CLOSE CONTEST!':'👑 DOMINANT PERFORMANCE!';
+ const win=idx.filter(i=>sc[i]===mx),rest=idx.filter(i=>sc[i]!==mx).sort((a,c)=>sc[c]-sc[a]),tie=win.length>1,
+  dd=rest.length?Math.round(mx-sc[rest[0]]):0,lab=tie?"\ud83e\udd1d IT'S A TIE!":dd<=2?'\ud83d\udd25 WHAT A BATTLE!':dd<=5?'\u2694\ufe0f CLOSE CONTEST!':'\ud83d\udc51 DOMINANT PERFORMANCE!',wn=win.map(i=>esc(names[i])).join(' & ');
  f.classList.add('reveal');
- const mini=i=>`<div class='fgl ft${i} ${win<0||win===i?'champ':'fdim'}'><div class='ftn'>${esc(names[i])}</div><b>${sc[i].toFixed(1)} / 100</b></div>`;
- scr(`<div class='ftitle'>${win<0?'🤝 EVEN MATCH':'🏆 STRONGER TEAM'}</div><div class='wname'>${win<0?esc(names[0])+' = '+esc(names[1]):esc(names[win])}</div><div class='ftn'>TEAM STRENGTH</div><div class='fbig' id='ws'>0.0</div>`);
- animNum($('ws'),0,win<0?sc[0]:sc[win],1500,v=>v.toFixed(1)+' / 100');await sl(2200);if(!alive())return;
- scr(`${TROPHY}<div class='ftitle' style='color:#f5c542'>🏆 CHAMPIONS</div><div class='wname'>${win<0?'BOTH TEAMS':esc(names[win])}</div><div class='ftitle' style='font-size:20px'>${lab}</div><div class='ftwo'>${mini(0)}${mini(1)}</div>`);
+ scr(`<div class='ftitle'>${tie?'\ud83e\udd1d TOP SCORE TIE':'\ud83c\udfc6 STRONGER TEAM'}</div><div class='wname'>${wn}</div><div class='ftn'>TEAM STRENGTH</div><div class='fbig' id='ws'>0.0</div>`);
+ animNum($('ws'),0,mx,1500,v=>v.toFixed(1)+' / 100');await sl(2200);if(!alive())return;
+ const mini=i=>`<div class='fgl ${win.includes(i)?'champ':'fdim'}' style='border-top:3px solid ${PC[i]}'><div class='ftn'>${esc(names[i])}</div><b>${sc[i].toFixed(1)} / 100</b></div>`;
+ scr(`${TROPHY}<div class='ftitle' style='color:#f5c542'>\ud83c\udfc6 CHAMPIONS</div><div class='wname'>${wn}</div><div class='ftitle' style='font-size:20px'>${lab}</div><div class='fgrid'>${[...win,...rest].map(mini).join('')}</div>`);
  fxAdd(innerWidth/2,innerHeight*.3,70,['#f5c542','#fff2b0','#fff'],{s:8,g:.1,d:.012,sq:1});confetti(3500);await sl(4300);if(!alive())return;
  f.classList.remove('reveal');
- const card=(i,tag,cls)=>`<div class='fgl ft${i} ${cls}'><div style='opacity:.7;letter-spacing:2px'>${tag}</div><div class='wname' style='font-size:clamp(22px,6vw,34px)'>${esc(names[i])}</div><div>TEAM STRENGTH: <b>${sc[i].toFixed(1)} / 100</b></div><div class='plist'><b>PLAYERS:</b> ${team[i].map(x=>esc(x.name)+' ₹'+x.price).join(' • ')}</div><div>TOTAL SPENT: <b>₹${spent(i)}</b> • REMAINING: <b>₹${money[i]}</b></div></div>`;
- LAST=`🏏 Cricket Auction Battle (${matchFormat})\n${win<0?'🤝 Tie':'🏆 Winner: '+names[win]}\n${names[0]}: ${sc[0].toFixed(1)}/100 (spent ₹${spent(0)})\n${names[1]}: ${sc[1].toFixed(1)}/100 (spent ₹${spent(1)})\n${lab}`;
- scr(`<div class='ftitle'>🏆 FINAL RESULT</div>${win<0?card(0,'TIE','')+card(1,'TIE',''):card(win,'WINNER','champ')+card(1-win,'RUNNER-UP','fdim')}<div class='fbtns'><button onclick='showHist()'>VIEW AUCTION HISTORY</button><button onclick='playAgain()'>PLAY AGAIN</button><button class='secondary' onclick='shareRes(this)'>SHARE RESULT</button></div>`);
+ const order=[...win,...rest],tags=r=>tie&&r<win.length?'TIE':r===0?'WINNER':r===1?'RUNNER-UP':['','','3RD PLACE','4TH PLACE','5TH PLACE'][r];
+ const card=(i,r)=>`<div class='fgl ${r<win.length?'champ':'fdim'}' style='border-top:3px solid ${PC[i]}'><div style='opacity:.7;letter-spacing:2px'>${tags(r)}</div><div class='wname' style='font-size:clamp(22px,6vw,34px)'>${esc(names[i])}</div><div>TEAM STRENGTH: <b>${sc[i].toFixed(1)} / 100</b></div><div class='plist'><b>PLAYERS:</b> ${team[i].map(x=>esc(x.name)+' \u20b9'+x.price).join(' \u2022 ')}</div><div>TOTAL SPENT: <b>\u20b9${spent(i)}</b> \u2022 REMAINING: <b>\u20b9${money[i]}</b></div></div>`;
+ LAST=`\ud83c\udfcf Cricket Auction Battle (${matchFormat})\n${tie?'\ud83e\udd1d Tie: '+win.map(i=>names[i]).join(' & '):'\ud83c\udfc6 Winner: '+names[win[0]]}\n`+order.map((i,r)=>`${r+1}. ${names[i]}: ${sc[i].toFixed(1)}/100 (spent \u20b9${spent(i)})`).join('\n')+`\n${lab}`;
+ scr(`<div class='ftitle'>\ud83c\udfc6 FINAL RESULT</div>${order.map((i,r)=>card(i,r)).join('')}<div class='fbtns'><button onclick='showHist()'>VIEW AUCTION HISTORY</button><button onclick='playAgain()'>PLAY AGAIN</button><button class='secondary' onclick='shareRes(this)'>SHARE RESULT</button></div>`);
 }
+
+
+(function(){
+  const splash=document.getElementById('dynastySplash');
+  if(!splash)return;
+  setTimeout(()=>{
+    splash.classList.add('hide');
+    setTimeout(()=>splash.remove(),750);
+  },2800);
+})();
 openPlayers();
 </script>
 </body>
